@@ -7,17 +7,26 @@
   <link rel="stylesheet" href="./style.css">
   <title>League Profile Tool</title>
 </head>
+<script src="app.js"></script>
+<script type="text/javascript">
+  window.addEventListener('keydown',function(e){if(e.keyIdentifier=='U+000A'||e.keyIdentifier=='Enter'||e.keyCode==13){if(e.target.nodeName=='INPUT'&&e.target.type=='text'){e.preventDefault();return false;}}},true);
+  </script>
 <body>
   <h1>League Profile Tool</h1>
   <p>built by gregvansci</p>
-  <form action="">
-    <select name="region" id="region">
+  <form id="accountlookup">
+    <select name="accountregion" id="accountregion">
       <option value="NA">North America</option>
       <option value="EUW">Europe - West</option>
       <option value="KR">South Korea</option>
     </select>
     <input type="text" name="accountname" id="accountname" >
-    <input type="button" value="Search">
+    <input type="button" value="Search" onclick="queryAccount(accountregion,accountname)">
   </form>
+  <div name="search-history">
+    <h4>Recently Searched</h4>
+    <h5 id="hist1"></h5>
+    <ul id="recent"></ul>
+  </div>
 </body>
 </html>
