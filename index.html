@@ -16,17 +16,16 @@
   <p>built by gregvansci</p>
   <form id="accountlookup">
     <select name="accountregion" id="accountregion">
-      <option value="NA">North America</option>
+      <option value="na1">North America</option>
       <option value="EUW">Europe - West</option>
       <option value="KR">South Korea</option>
     </select>
     <input type="text" name="accountname" id="accountname" >
-    <input type="button" value="Search" onclick="queryAccount(accountregion,accountname)">
+    <input type="button" value="Search" onclick="searchAccount(accountregion,accountname)">
   </form>
   <div name="search-history">
     <h4>Recently Searched</h4>
-    <h5 id="hist1"></h5>
-    <ul id="recent"></ul>
+     <ul id="recent"></ul>
   </div>
 </body>
 </html>
