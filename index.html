@@ -16,16 +16,20 @@
   <p>built by gregvansci</p>
   <form id="accountlookup">
     <select name="accountregion" id="accountregion">
-      <option value="na1">North America</option>
-      <option value="EUW">Europe - West</option>
-      <option value="KR">South Korea</option>
+      <option value="na">North America</option>
+      <option value="euw">Europe - West</option>
+      <option value="kr">South Korea</option>
     </select>
     <input type="text" name="accountname" id="accountname" >
-    <input type="button" value="Search" onclick="searchAccount(accountregion,accountname)">
+    <input type="button" value="Search" onclick="checkValitidy(accountregion,accountname)">
   </form>
   <div name="search-history">
     <h4>Recently Searched</h4>
-     <ul id="recent"></ul>
+    <ul id="recent"></ul>
+  </div>
+  <div name="tracking">
+    <h4>Tracked Accounts</h4>
+    <ul id="tracked"></ul>
   </div>
 </body>
 </html>

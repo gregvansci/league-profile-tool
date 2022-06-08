@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Summoner</title>
+</head>
+<script src="../app.js"></script>
+<body>
+  <div name="banner">
+    <p>Icon</p>
+    <h3>Account Name</h3>
+    <h4>Ranked Solo</h4>
+    <input type="button" value="Update">
+    <input type="button" value="Match Details">
+    <input type="button" value="Account Details">
+    <form id="accountlookup">
+      <select name="accountregion" id="accountregion">
+        <option value="na">North America</option>
+        <option value="euw">Europe - West</option>
+        <option value="kr">South Korea</option>
+      </select>
+      <input type="text" name="accountname" id="accountname" >
+      <input type="button" value="Search" onclick="searchAccount(accountregion,accountname)">
+    </form>
+  </div>
+  <div name="overview">
+    <div name="champion-info">
+      <h5>Season 2022 All</h5>
+      <h6>Champion, CS, KDA, Winrate, Played</h6>
+    </div>
+    <div name="match-info">
+      <h5>Recent Matches</h5>
+    </div>
+    <div name="role-info  ">
+      <h5>Role Performance</h5>
+      <h5>Winrate over time graph</h5>
+    </div>
+  </div>
+  <div name="">
+
+  </div>
+  
+</body>
+</html>

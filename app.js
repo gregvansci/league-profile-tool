@@ -4,14 +4,48 @@
 // session storage will hold: recent searches, current account info, current account region
 
 
-function searchAccount(queryRegion, queryAccount) {
-  // check if name has special characters
-  // if yes, do nothing
-  // if no, go to summoner page
-  // /summoners/na/Greysi
+function containsSpecialChars(str) {
+  const specialCharacters = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+  return specialCharacters.test(str);
+}
+
+function checkValitidy( queryRegion, queryName ) {
+  // check for special characters
+  if (!containsSpecialChars( queryName.value ) && queryName.value.length >= 3 && queryName.value.length <= 16 ) {
+    // go to account page
+    window.location = ( "./summoner/profile.html?region=" + queryRegion.value + "&name=" + queryName.value);
+  }
+}
+
+function getParameter ( parameterName ) {
+  let parameters = new URLSearchParams( window.location.search );
+  return parameters.get( parameterName );
+}
+
+function searchAccount() {
+  // get url parameters
+  // use parameters to lookup account in riot api
+  // 
+  let region = getParameter("region");
+  let name = getParameter("name");
+  
   
 
+  addToHistory( region, name);
+  
 }
+
+function addToHistory( region, name ) {
+  //sessionStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+  
+  let searchHistory = {};
+  let inputAccount = {
+    id: region,
+    region: name
+  };
+  searchHistory.accounts.unshift(inputAccount);
+}
+
 
 
 
