@@ -3,6 +3,44 @@
 // use session storage to get data between pages
 // session storage will hold: recent searches, current account info, current account region
 
+var devkey;
+
+function initIndex() {
+  getDevKey("./dev-key.json");
+  getHistory();
+}
+
+function initProfile() {
+  getDevKey("../dev-key.json")
+  searchAccount(); 
+}
+
+function getDevKey(keyPath) {
+  if (localStorage.getItem('devkey') === null) {
+    fetch(keyPath)
+    .then(response => response.json())
+    .then(data => {
+      devkey = data.devkey
+      localStorage.setItem('devkey', devkey)
+    })  
+  }
+  else 
+    devkey = localStorage.getItem('devkey');
+}
+
+
+function getHistory() {
+  let list = document.getElementById("history");
+  list.innerHTMLHTML="";
+  if(localStorage.getItem('searchHistory') !== null) {
+    let searchHistory = JSON.parse(localStorage.getItem('searchHistory') );
+    searchHistory.accounts.forEach((acc)=>{
+      let li = document.createElement('li');
+      li.innerText = acc.name;
+      list.appendChild(li);
+    })
+  }
+}
 
 function containsSpecialChars(str) {
   const specialCharacters = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
@@ -23,27 +61,41 @@ function getParameter ( parameterName ) {
 }
 
 function searchAccount() {
-  // get url parameters
-  // use parameters to lookup account in riot api
-  // 
+  // get parameters
   let region = getParameter("region");
   let name = getParameter("name");
-  
-  
 
-  addToHistory( region, name);
+  // assume account is valid for now
+  // 
+  
+  
+  // if account found add it to the history
+  addToHistory( region, name );
   
 }
 
-function addToHistory( region, name ) {
-  //sessionStorage.setItem('searchHistory', JSON.stringify(searchHistory));
-  
-  let searchHistory = {};
+function addToHistory( region, name ) {  
   let inputAccount = {
-    id: region,
-    region: name
+    region: region,
+    name: name
   };
-  searchHistory.accounts.unshift(inputAccount);
+
+  if (localStorage.getItem('searchHistory') === null) {
+    firstInput = {
+      accounts: [inputAccount]
+    };
+    localStorage.setItem('searchHistory', JSON.stringify(firstInput));
+  }
+  else {
+    let searchHistory = JSON.parse(localStorage.getItem('searchHistory') );
+    searchHistory.accounts.unshift(inputAccount);
+    // line is not working correctly
+    // searchHistory.accounts = [...new Set(searchHistory.accounts)];
+    if (searchHistory.accounts.length > 10) {
+      searchHistory.accounts.pop();
+    }
+    localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+  } 
 }
 
 
@@ -56,7 +108,7 @@ var searchHistory = {
   }]
 };
 var devkey;
-sessionStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
 
 let keyRequest = new Request("./dev-key.json");
 
@@ -73,7 +125,7 @@ function queryAccount(queryRegion,queryName) {
 
 
   // add account to front of search history, remove duplicates, max length of 10
-  searchHistory = JSON.parse(sessionStorage.getItem('searchHistory'));
+  searchHistory = JSON.parse(localStorage.getItem('searchHistory'));
   let test1 = queryName;
   let test2 = queryRegion
   let inputAccount = {
@@ -87,7 +139,7 @@ function queryAccount(queryRegion,queryName) {
   if(searchHistory.accounts.length > 10) {
     searchHistory.accounts.pop();
   }
-  sessionStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+  localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
   /*
   searchHistory.unshift(name.value);
   searchHistory = [...new Set(searchHistory)];

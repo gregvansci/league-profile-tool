@@ -11,7 +11,7 @@
 <script type="text/javascript">
   window.addEventListener('keydown',function(e){if(e.keyIdentifier=='U+000A'||e.keyIdentifier=='Enter'||e.keyCode==13){if(e.target.nodeName=='INPUT'&&e.target.type=='text'){e.preventDefault();return false;}}},true);
   </script>
-<body>
+<body onload="initIndex()">
   <h1>League Profile Tool</h1>
   <p>built by gregvansci</p>
   <form id="accountlookup">
@@ -25,7 +25,7 @@
   </form>
   <div name="search-history">
     <h4>Recently Searched</h4>
-    <ul id="recent"></ul>
+    <ul id="history"></ul>
   </div>
   <div name="tracking">
     <h4>Tracked Accounts</h4>
