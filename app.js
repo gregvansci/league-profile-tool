@@ -4,6 +4,7 @@
 // session storage will hold: recent searches, current account info, current account region
 
 var devkey;
+var returnStatus;
 
 function initIndex() {
   getDevKey("./dev-key.json");
@@ -11,7 +12,7 @@ function initIndex() {
 }
 
 function initProfile() {
-  getDevKey("../dev-key.json")
+  getDevKey("../dev-key.json");
   searchAccount(); 
 }
 
@@ -20,8 +21,8 @@ function getDevKey(keyPath) {
     fetch(keyPath)
     .then(response => response.json())
     .then(data => {
-      devkey = data.devkey
-      localStorage.setItem('devkey', devkey)
+      devkey = data.devkey;
+      localStorage.setItem('devkey', devkey);
     })  
   }
   else 
@@ -51,7 +52,7 @@ function checkValitidy( queryRegion, queryName ) {
   // check for special characters
   if (!containsSpecialChars( queryName.value ) && queryName.value.length >= 3 && queryName.value.length <= 16 ) {
     // go to account page
-    window.location = ( "./summoner/profile.html?region=" + queryRegion.value + "&name=" + queryName.value);
+    window.location = ( './summoner/profile.html?region=' + queryRegion.value + '&name=' + queryName.value);
   }
 }
 
@@ -60,18 +61,49 @@ function getParameter ( parameterName ) {
   return parameters.get( parameterName );
 }
 
+function translateRegion ( regionInput ) {
+  if ( regionInput == "na" )
+    return "na1";
+  else if ( regionInput == "euw" )
+    return "euw1";
+  else if ( regionInput == "kr") 
+    return "kr";
+}
+
+function goHome() {
+  window.location = ("../");
+}
+
 function searchAccount() {
   // get parameters
-  let region = getParameter("region");
+  let region = translateRegion(getParameter("region"));
   let name = getParameter("name");
 
   // assume account is valid for now
-  // 
+  // fetch summoner by name
+  // https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/' + name + '?api_key=' + devkey
+  fetchSummonerByName( region, name )
+
   
   
   // if account found add it to the history
   addToHistory( region, name );
-  
+}
+
+function fetchSummonerByName( region,name ) {
+  var output;
+  fetch('https://'+region+'.api.riotgames.com/lol/summoner/v4/summoners/by-name/'+name+'?api_key='+devkey)
+    .then(res => res.json())
+    .then(data => {
+      
+      document.getElementById("profile-icon").src = 'http://ddragon.leagueoflegends.com/cdn/12.11.1/img/profileicon/'+data.profileIconId+'.png';  
+      document.getElementById("summoner-level").innerHTML = "Level: "+data.summonerLevel;
+      document.getElementById("profile-name").innerHTML = data.name;
+    })
+}
+
+function fetchEntriesBySummoner( region, name) {
+
 }
 
 function addToHistory( region, name ) {  
