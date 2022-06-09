@@ -95,15 +95,31 @@ function fetchSummonerByName( region,name ) {
   fetch('https://'+region+'.api.riotgames.com/lol/summoner/v4/summoners/by-name/'+name+'?api_key='+devkey)
     .then(res => res.json())
     .then(data => {
+      console.log(data);
+      if(data.hasOwnProperty("status")) {console.log("account doesn't exist")}
+      else {
+        document.getElementById("profile-icon").src = 'http://ddragon.leagueoflegends.com/cdn/12.11.1/img/profileicon/'+data.profileIconId+'.png';  
+        document.getElementById("summoner-level").innerHTML = "Level: "+data.summonerLevel;
+        document.getElementById("profile-name").innerHTML = data.name;
+        fetchEntriesBySummoner( region, data.id)
+      }
       
-      document.getElementById("profile-icon").src = 'http://ddragon.leagueoflegends.com/cdn/12.11.1/img/profileicon/'+data.profileIconId+'.png';  
-      document.getElementById("summoner-level").innerHTML = "Level: "+data.summonerLevel;
-      document.getElementById("profile-name").innerHTML = data.name;
     })
 }
 
-function fetchEntriesBySummoner( region, name) {
+// test case accounts:
+// 5ombre -> neither
+// Kim Down -> both solo and flex ranked
+// Sonder -> only flex ranked
 
+
+function fetchEntriesBySummoner( region, id) {
+  fetch('https://'+region+'.api.riotgames.com/lol/league/v4/entries/by-summoner/'+id+'?api_key='+devkey)
+    .then(res => res.json())
+    .then(data => {
+      console.log(data);
+      
+    })
 }
 
 function addToHistory( region, name ) {  
