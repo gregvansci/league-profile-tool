@@ -8,15 +8,11 @@
   <title>League Profile Tool</title>
 </head>
 <script src="app.js"></script>
-<script type="text/javascript">
-  window.addEventListener('keydown',function(e){if(e.keyIdentifier=='U+000A'||e.keyIdentifier=='Enter'||e.keyCode==13){if(e.target.nodeName=='INPUT'&&e.target.type=='text'){e.preventDefault();return false;}}},true);
-  </script>
 <body onload="initIndex()">
-  
   <main>
     <nav>
       <div class="nav-left">
-        <h3 style="color: white">Home</h3>
+        <h3>Home</h3>
         <h3>Champions</h3>
         <h3>Stats</h3>
         <h3>Leaderboard</h3>
@@ -30,24 +26,56 @@
     </nav>
   
     <section aria-labelledby="home-greeting" class="home-section">
-      <div class="home-search">
-        <h1 id="home-greeting">League Profile Tool</h1>
-        <form id="accountlookup">
-          <select name="accountregion" id="accountregion">
-            <option value="na">North America</option>
-            <option value="euw">Europe - West</option>
-            <option value="kr">South Korea</option>
-          </select>
-          <input type="text" name="accountname" id="accountname" >
-          <input type="button" value="Search" onclick="checkValitidy(accountregion,accountname)">
+      <div class="home-content">
+        <div class="home-greeting">
+          <h1>League Profile Tool</h1>
+        </div> 
+
+        <form class="home-form" onsubmit="return false">
+          <div class="home-form-region">
+            <div class="region-icon-selected" id="na1" onclick="setRegion('na1')">
+              NA
+            </div>
+            <div class="region-icon-nonselected" id="euw1" onclick="setRegion('euw1')">
+              EUW
+            </div>
+            <div class="region-icon-nonselected" id="eun1" onclick="setRegion('eun1')">
+              EUNE
+            </div>
+            <div class="region-icon-nonselected" id="kr" onclick="setRegion('kr')">
+              KR
+            </div>
+          </div>
+          
+          <div class="home-form-search">
+            <div class="home-form-search-name">
+              <input type="text" id="accountname" name="accountname" class="home-form-search-name-input" placeholder="Search a Name" autocomplete="off">
+            </div>
+            <img id="searchbutton"src="./assets/search-icon.svg"/>
+          </div>
+          <script>
+            var input = document.getElementById("accountname");
+            input.addEventListener("keydown", function(e) {
+              if(e.key === "Enter") {
+                checkValidity(accountname);
+              }
+            });
+          </script>
+          <script>
+            var input = document.getElementById("searchbutton");
+            input.addEventListener("click", function(e) {
+              checkValidity(accountname);
+            });
+          </script>
         </form>
-        <div name="search-history">
-          <h4>Recently Searched</h4>
-          <ul id="history"></ul>
-        </div>
-        <div name="tracking">
-          <h4>Tracked Accounts</h4>
-          <ul id="tracked"></ul>
+
+        <div name="home-search-history">
+          <div name="home-search-history-title">
+            <h4>Recently Searched</h4>
+          </div>
+          <div name="home-search-history-list">
+            <ul id="history" ></ul>
+          </div>
         </div>
       </div>
     </section> 

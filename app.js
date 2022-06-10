@@ -5,9 +5,11 @@
 
 var devkey;
 var returnStatus;
+var searchRegion;
 
 function initIndex() {
   getDevKey("./dev-key.json");
+  searchRegion = "na1";
   getHistory();
 }
 
@@ -43,16 +45,27 @@ function getHistory() {
   }
 }
 
+function setRegion(region) {
+  document.getElementById(searchRegion).classList.replace('region-icon-selected', 'region-icon-nonselected');
+  searchRegion = region;
+  document.getElementById(searchRegion).classList.replace('region-icon-nonselected', 'region-icon-selected');
+}
+
 function containsSpecialChars(str) {
   const specialCharacters = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
   return specialCharacters.test(str);
 }
 
-function checkValitidy( queryRegion, queryName ) {
+function testFunction() {
+  console.log("test function output");
+}
+
+function checkValidity( queryName ) {
   // check for special characters
+  console.log("submit");
   if (!containsSpecialChars( queryName.value ) && queryName.value.length >= 3 && queryName.value.length <= 16 ) {
     // go to account page
-    window.location = ( './summoner/profile.html?region=' + queryRegion.value + '&name=' + queryName.value);
+    window.location = ( './summoner/profile.html?region=' + searchRegion + '&name=' + queryName.value);
   }
 }
 
@@ -61,14 +74,6 @@ function getParameter ( parameterName ) {
   return parameters.get( parameterName );
 }
 
-function translateRegion ( regionInput ) {
-  if ( regionInput == "na" )
-    return "na1";
-  else if ( regionInput == "euw" )
-    return "euw1";
-  else if ( regionInput == "kr") 
-    return "kr";
-}
 
 function goHome() {
   window.location = ("../");
@@ -76,7 +81,7 @@ function goHome() {
 
 function searchAccount() {
   // get parameters
-  let region = translateRegion(getParameter("region"));
+  let region = getParameter("region");
   let name = getParameter("name");
 
   // assume account is valid for now
