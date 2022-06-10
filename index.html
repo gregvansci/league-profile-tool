@@ -12,24 +12,45 @@
   window.addEventListener('keydown',function(e){if(e.keyIdentifier=='U+000A'||e.keyIdentifier=='Enter'||e.keyCode==13){if(e.target.nodeName=='INPUT'&&e.target.type=='text'){e.preventDefault();return false;}}},true);
   </script>
 <body onload="initIndex()">
-  <h1>League Profile Tool</h1>
-  <p>built by gregvansci</p>
-  <form id="accountlookup">
-    <select name="accountregion" id="accountregion">
-      <option value="na">North America</option>
-      <option value="euw">Europe - West</option>
-      <option value="kr">South Korea</option>
-    </select>
-    <input type="text" name="accountname" id="accountname" >
-    <input type="button" value="Search" onclick="checkValitidy(accountregion,accountname)">
-  </form>
-  <div name="search-history">
-    <h4>Recently Searched</h4>
-    <ul id="history"></ul>
-  </div>
-  <div name="tracking">
-    <h4>Tracked Accounts</h4>
-    <ul id="tracked"></ul>
-  </div>
+  
+  <main>
+    <nav>
+      <div class="nav-left">
+        <h3 style="color: white">Home</h3>
+        <h3>Champions</h3>
+        <h3>Stats</h3>
+        <h3>Leaderboard</h3>
+        <h3>Pros</h3>
+      </div>
+      <div class="nav-right">
+        <h3>About</h3>
+        <h3>Theme</h3>
+        <h3>Settings</h3>
+      </div>
+    </nav>
+  
+    <section aria-labelledby="home-greeting" class="home-section">
+      <div class="home-search">
+        <h1 id="home-greeting">League Profile Tool</h1>
+        <form id="accountlookup">
+          <select name="accountregion" id="accountregion">
+            <option value="na">North America</option>
+            <option value="euw">Europe - West</option>
+            <option value="kr">South Korea</option>
+          </select>
+          <input type="text" name="accountname" id="accountname" >
+          <input type="button" value="Search" onclick="checkValitidy(accountregion,accountname)">
+        </form>
+        <div name="search-history">
+          <h4>Recently Searched</h4>
+          <ul id="history"></ul>
+        </div>
+        <div name="tracking">
+          <h4>Tracked Accounts</h4>
+          <ul id="tracked"></ul>
+        </div>
+      </div>
+    </section> 
+  </main>
 </body>
 </html>
