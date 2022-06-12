@@ -12,23 +12,32 @@
   <main>
     <nav>
       <div class="nav-left">
-        <h3>Home</h3>
-        <h3>Champions</h3>
-        <h3>Stats</h3>
-        <h3>Leaderboard</h3>
-        <h3>Pros</h3>
+        <div class="nav-left-current">
+          <h3>Home</h3>
+        </div>
+        <div class="nav-left-option">
+          <h3>Champions</h3>
+        </div>
+        <div class="nav-left-option">
+          <h3>Stats</h3>
+        </div>
+        <div class="nav-left-option">
+          <h3>Leaderboard</h3>
+        </div>
+        <div class="nav-left-option">
+          <h3>Pros</h3>
+        </div>
       </div>
       <div class="nav-right">
-        <h3>About</h3>
-        <h3>Theme</h3>
-        <h3>Settings</h3>
+        <img id="themeSelect" src="./assets/light-theme-icon.svg"/>
+        <img id="infoPage" src="./assets/info-icon.svg"/>
       </div>
     </nav>
   
     <section aria-labelledby="home-greeting" class="home-section">
       <div class="home-content">
         <div class="home-greeting">
-          <h1>League Profile Tool</h1>
+          <h1>League Check</h1>
         </div> 
 
         <form class="home-form" onsubmit="return false">
@@ -49,7 +58,7 @@
           
           <div class="home-form-search">
             <div class="home-form-search-name">
-              <input type="text" id="accountname" name="accountname" class="home-form-search-name-input" placeholder="Search a Name" autocomplete="off">
+              <input type="text" id="accountname" name="accountname" class="home-form-search-name-input" placeholder="Search a Name" autocomplete="off" spellcheck="false">
             </div>
             <img id="searchbutton"src="./assets/search-icon.svg"/>
           </div>
