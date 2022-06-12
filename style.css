@@ -5,6 +5,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@700&display=swap');
 
 body {
   margin: 0;
@@ -16,6 +17,12 @@ main {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  /*
+  background-image: url("./assets/background-image.jpg");
+  background-size:cover;
+  backdrop-filter: blur(5px);
+  */
+  background-color: #18172B;
 }
 
 main h1 {
@@ -47,13 +54,13 @@ nav {
   padding-bottom: 20px; 
   font-size: 1rem;
   font-weight: 400;
-  color: hsl(188, 54%, 50%);
+  color: #AAA;
 }
 
 .nav-left-option h3:hover {
   text-decoration: underline;
   text-underline-offset: 5px;
-  color: hsl(188, 54%, 40%);
+  color: white;
   cursor: pointer;
 }
 
@@ -66,7 +73,7 @@ nav {
   font-weight: 400;
   text-decoration: underline;
   text-underline-offset: 5px;
-  color: hsl(188, 54%, 40%);
+  color: white;
 }
 
 .nav-right {
@@ -83,11 +90,12 @@ nav {
   padding-bottom: 20px;
   font-size: 1rem;
   font-weight: 400;
-  filter: invert(78%) sepia(11%) saturate(2993%) hue-rotate(148deg) brightness(84%) contrast(80%);}
+  filter: invert(78%) sepia(5%) saturate(40%) hue-rotate(316deg) brightness(87%) contrast(88%);
+}
 
 .nav-right img:hover {
   cursor: pointer;
-  filter: invert(48%) sepia(42%) saturate(643%) hue-rotate(140deg) brightness(91%) contrast(88%);}
+}
 
 .home-section {
   margin: auto;
@@ -106,9 +114,13 @@ nav {
 }
 
 .home-greeting {
-  color: hsl(188, 54%, 40%);
-  font-family:'Segoe UI', sans-serif;
+  color: white;
+  font-family: 'Assistant', sans-serif;
   font-size: 2rem;
+}
+
+.home-greeting img {
+  height: 35vh;
 }
 
 .home-form {
@@ -126,7 +138,7 @@ nav {
 }
 
 .region-icon-selected {
-  background-color: hsl(188, 54%, 50%);
+  background-color: #D4AC2B;
   margin: 5px;
   padding: 5px;
   padding-left: 10px;
@@ -135,10 +147,11 @@ nav {
   cursor: pointer;
   border-radius: 3px;
   font-size: .75rem;
+  color: white
 }
 
 .region-icon-nonselected {
-  background-color: #CCC;
+  background-color: white;
   margin: 5px;
   padding: 5px;
   padding-left: 10px;
@@ -165,7 +178,7 @@ nav {
   min-width: 250px;
   max-width: 500px;
   border-radius: 40px;
-  border-style: solid;
+
 }
 
 .home-form-search img {
@@ -195,8 +208,13 @@ nav {
   justify-content: center;
   align-items: center;
   margin: auto;
-  text-align: center;
   min-width: 500px;
+  padding:0;
+}
+
+.home-search-history-title h4{
+  color: white;
+  margin-bottom: 0; 
 }
 
 
@@ -204,4 +222,6 @@ ul {
   columns: 2;
   -webkit-columns: 2;
   -moz-columns: 2;
+  column-gap: 75px;
+  color: white;
 }

@@ -131,7 +131,7 @@ function fetchEntriesBySummoner( region, id) {
           document.getElementById("ranked-solo-winrate").innerHTML = "Winrate: "+Math.round(element.wins * 100 / (element.wins + element.losses)) + "%";
         }
         else if (element.queueType === "RANKED_FLEX_SR") {
-          document.getElementById("ranked-flex").innerHTML = "Ranked Solo: "+element.tier+" "+element.rank;
+          document.getElementById("ranked-flex").innerHTML = "Ranked Flex: "+element.tier+" "+element.rank;
           document.getElementById("ranked-flex-lp").innerHTML = element.leaguePoints+" LP";
           document.getElementById("ranked-flex-winloss").innerHTML = element.wins+"W "+element.losses+"L"; 
           document.getElementById("ranked-flex-winrate").innerHTML = "Winrate: "+Math.round(element.wins * 100 / (element.wins + element.losses)) + "%";

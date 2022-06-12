@@ -1,0 +1,6 @@
+color list
+background - #18172B (dark purple)
+color scheme - #7E370C #B05E27 #D4AC2B #FFCE45 (darkest -> lightest, brown -> gold) 
+
+logo palette - https://colorhunt.co/palette/ffce45d4ac2bb05e277e370c
+logo builder - https://www.canva.com/design/play?create=&category=tACZCvjI6mE&referrer=logo-landing-page
