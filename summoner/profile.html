@@ -4,24 +4,78 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../style.css">
   <title>Summoner</title>
 </head>
 <script src="../app.js"></script>
 <body onload="initProfile()">
-  <button onclick="goHome()">Home</button>
-  <br>
-  <br>
-  <img id="profile-icon">
-  <p id="summoner-level">Summoner Level</p>
-  <p id="profile-name">Profile Name</p>
-  <p id="ranked-solo">Ranked Solo: Unranked</p>
-  <p id="ranked-solo-lp"></p>
-  <p id="ranked-solo-winloss"></p>
-  <p id="ranked-solo-winrate"></p>
-  <p id="ranked-flex">Ranked Flex: Unranked</p>
-  <p id="ranked-flex-lp"></p>
-  <p id="ranked-flex-winloss"></p>
-  <p id="ranked-flex-winrate"></p>
+  <main>
+    <nav>
+      <div class="nav-left">
+        <div class="nav-left-option">
+          <h3 onclick="goHome()">Home</h3>
+        </div>
+        <div class="nav-left-option">
+          <h3>Champions</h3>
+        </div>
+        <div class="nav-left-option">
+          <h3>Stats</h3>
+        </div>
+        <div class="nav-left-option">
+          <h3>Leaderboard</h3>
+        </div>
+        <div class="nav-left-option">
+          <h3>Pros</h3>
+        </div>
+      </div>
+      <div class="nav-right">
+        <img id="themeSelect" src="../assets/light-theme-icon.svg"/>
+        <img id="infoPage" src="../assets/info-icon.svg"/>
+      </div>
+    </nav>
+    <div class="dashboard">
+      <div class="dashboard-left">
+        <div class="dashboard-left-tile">
+          <div class="dashboard-left-tile-name">
+            <div class="dashboard-left-tile-name-icon">
+              <img id="profile-icon">
+              <p id="summoner-level">Summoner Level</p>
+            </div>
+            <h2 id="profile-name">Profile Name</h2>
+          </div>
+        </div>
+        <div class="dashboard-left-tile">
+          <p id="ranked-solo">Ranked Solo: Unranked</p>
+          <p id="ranked-solo-lp"></p>
+          <p id="ranked-solo-winloss"></p>
+          <p id="ranked-solo-winrate"></p>
+        </div>
+        <div class="dashboard-left-tile">
+          <p id="ranked-flex">Ranked Flex: Unranked</p>
+          <p id="ranked-flex-lp"></p>
+          <p id="ranked-flex-winloss"></p>
+          <p id="ranked-flex-winrate"></p>
+        </div>
+      </div>
+      <div class="dashboard-main">
+        <div class="dashboard-main-nav">
+          <div class="dashboard-main-nav-current">
+            <h3>Match History</p>
+          </div>
+
+          <div class="dashboard-main-nav-option">
+            <h3>Champions</p>
+          </div>
+          <div class="dashboard-main-nav-option">
+            <h3>Challenges</p>
+          </div>
+        </div>
+        <div class="dashboard-main-content">
+
+        </div>
+      </div>
+    </div>
+  </main>
   
   <!-- 
     scrollable can be match history, champion history, roll history,
@@ -30,3 +84,6 @@
 
 </body>
 </html>
+
+
+<!-- style="display: none" -->
