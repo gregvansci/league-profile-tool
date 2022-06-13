@@ -104,7 +104,7 @@ function fetchSummonerByName( region,name ) {
       if(data.hasOwnProperty("status")) {console.log("account doesn't exist")}
       else {
         document.getElementById("profile-icon").src = 'http://ddragon.leagueoflegends.com/cdn/12.11.1/img/profileicon/'+data.profileIconId+'.png';  
-        document.getElementById("summoner-level").innerHTML = "Level: "+data.summonerLevel;
+        document.getElementById("summoner-level").innerHTML = data.summonerLevel;
         document.getElementById("profile-name").innerHTML = data.name;
         fetchEntriesBySummoner( region, data.id)
       }
@@ -125,15 +125,15 @@ function fetchEntriesBySummoner( region, id) {
       console.log(data);
       data.forEach(element => {
         if(element.queueType === "RANKED_SOLO_5x5") {
-          document.getElementById("ranked-solo").innerHTML = "Ranked Solo: "+element.tier+" "+element.rank; 
+          document.getElementById("ranked-solo-icon").src = '../assets/ranked-icons/'+element.tier.toLowerCase()+'.webp';
+          document.getElementById("ranked-solo").innerHTML = element.tier+" "+element.rank; 
           document.getElementById("ranked-solo-lp").innerHTML = element.leaguePoints+" LP";
-          document.getElementById("ranked-solo-winloss").innerHTML = element.wins+"W "+element.losses+"L";
-          document.getElementById("ranked-solo-winrate").innerHTML = "Winrate: "+Math.round(element.wins * 100 / (element.wins + element.losses)) + "%";
+          document.getElementById("ranked-solo-winloss").innerHTML = Math.round(element.wins * 100 / (element.wins + element.losses)) + "% "+element.wins+"W "+element.losses+"L";
         }
         else if (element.queueType === "RANKED_FLEX_SR") {
           document.getElementById("ranked-flex").innerHTML = "Ranked Flex: "+element.tier+" "+element.rank;
           document.getElementById("ranked-flex-lp").innerHTML = element.leaguePoints+" LP";
-          document.getElementById("ranked-flex-winloss").innerHTML = element.wins+"W "+element.losses+"L"; 
+          document.getElementById("ranked-flex-winloss").innerHTML = Math.round(element.wins * 100 / (element.wins + element.losses)) + "%" + element.wins+"W "+element.losses+"L"; 
           document.getElementById("ranked-flex-winrate").innerHTML = "Winrate: "+Math.round(element.wins * 100 / (element.wins + element.losses)) + "%";
         }
       })
