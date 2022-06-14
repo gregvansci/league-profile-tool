@@ -5,6 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../style.css">
+  <link rel="shortcut icon" href="../assets/logo-image.png" />
   <title>Summoner</title>
 </head>
 <script src="../app.js"></script>
@@ -44,26 +45,55 @@
             <h2 id="profile-name">Profile Name</h2>
           </div>
         </div>
-        <div class="dashboard-left-tile">
+
+        <div class="dashboard-left-tile" id="rank-solo-unranked">
+          <div class="dashboard-left-tile-unranked">
+            <h4>Ranked Solo: Unranked</h4>
+          </div>
+        </div>
+
+        <div class="dashboard-left-tile" id="rank-solo-check">
           <div class="dashboard-left-tile-rank">
             <div class="dashboard-left-tile-rank-icon">
               <img id="ranked-solo-icon">
-              <h4>Ranked</h4>
-              <h4>Solo/Duo</h4>
+              <div class="dashboard-left-tile-rank-icon-text">
+                <h4 id="db-solo-text1"></h4>
+                <h4 id="db-solo-text2"></h4>
+              </div>
             </div>
             <div class="dashboard-left-tile-rank-info">
-              <h3 id="ranked-solo">Unranked</h3>
+              <h3 id="ranked-solo"></h3>
               <h4 id="ranked-solo-lp"></h4>
               <h5 id="ranked-solo-winloss"></h5>
             </div>
           </div>
         </div>
-        <div class="dashboard-left-tile">
-          <p id="ranked-flex">Ranked Flex: Unranked</p>
-          <p id="ranked-flex-lp"></p>
-          <p id="ranked-flex-winloss"></p>
-          <p id="ranked-flex-winrate"></p>
+
+        <div class="dashboard-left-tile" id="rank-flex-unranked">
+          <div class="dashboard-left-tile-unranked">
+            <h4>Ranked Flex: <span>Unranked</span></h4>
+          </div>
         </div>
+
+        <div class="dashboard-left-tile" id="rank-flex-check">
+          <div class="dashboard-left-tile-rank">
+            <div class="dashboard-left-tile-rank-icon">
+              <img id="ranked-flex-icon">
+              <div class="dashboard-left-tile-rank-icon-text">
+                <h4 id="db-flex-text1"></h4>
+                <h4 id="db-flex-text2"></h4>
+              </div>
+            </div>
+            <div class="dashboard-left-tile-rank-info">
+              <h3 id="ranked-flex"></h3>
+              <h4 id="ranked-flex-lp"></h4>
+              <h5 id="ranked-flex-winloss"></h5>
+            </div>
+          </div>
+        </div>
+
+
+        
       </div>
       <div class="dashboard-main">
         <div class="dashboard-main-nav">

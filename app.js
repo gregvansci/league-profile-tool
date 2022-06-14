@@ -106,6 +106,7 @@ function fetchSummonerByName( region,name ) {
         document.getElementById("profile-icon").src = 'http://ddragon.leagueoflegends.com/cdn/12.11.1/img/profileicon/'+data.profileIconId+'.png';  
         document.getElementById("summoner-level").innerHTML = data.summonerLevel;
         document.getElementById("profile-name").innerHTML = data.name;
+        document.title = data.name+" - Profile";
         fetchEntriesBySummoner( region, data.id)
       }
       
@@ -123,20 +124,42 @@ function fetchEntriesBySummoner( region, id) {
     .then(res => res.json())
     .then(data => {
       console.log(data);
+      let solo = false, flex = false;
+
       data.forEach(element => {
-        if(element.queueType === "RANKED_SOLO_5x5") {
+          if(element.queueType === "RANKED_SOLO_5x5") {
+          solo = true;
+          document.getElementById("rank-solo-unranked").style.display = "none";
+          document.getElementById("db-solo-text1").innerHTML = "Ranked";
+          document.getElementById("db-solo-text2").innerHTML = "Solo/Duo";
           document.getElementById("ranked-solo-icon").src = '../assets/ranked-icons/'+element.tier.toLowerCase()+'.webp';
-          document.getElementById("ranked-solo").innerHTML = element.tier+" "+element.rank; 
+          let rankTier = element.tier.charAt(0) + element.tier.substr(1).toLowerCase();
+          if (rankTier == "Master" || rankTier == "Grandmaster" || rankTier == "Challenger") {
+
+          }
+          else { rankTier = rankTier+" "+element.rank; }
+          document.getElementById("ranked-solo").innerHTML = rankTier; 
           document.getElementById("ranked-solo-lp").innerHTML = element.leaguePoints+" LP";
-          document.getElementById("ranked-solo-winloss").innerHTML = Math.round(element.wins * 100 / (element.wins + element.losses)) + "% "+element.wins+"W "+element.losses+"L";
+          document.getElementById("ranked-solo-winloss").innerHTML = Math.round(element.wins * 100 / (element.wins + element.losses)) + "% - "+element.wins+"W "+element.losses+"L";
         }
         else if (element.queueType === "RANKED_FLEX_SR") {
-          document.getElementById("ranked-flex").innerHTML = "Ranked Flex: "+element.tier+" "+element.rank;
+          flex = true;
+          document.getElementById("rank-flex-unranked").style.display = "none";
+          document.getElementById("db-flex-text1").innerHTML = "Ranked";
+          document.getElementById("db-flex-text2").innerHTML = "Flex";
+          document.getElementById("ranked-flex-icon").src = '../assets/ranked-icons/'+element.tier.toLowerCase()+'.webp';
+          let rankTier = element.tier.charAt(0) + element.tier.substr(1).toLowerCase();
+          if (rankTier == "Master" || rankTier == "Grandmaster" || rankTier == "Challenger") {
+
+          }
+          else { rankTier = rankTier+" "+element.rank; }
+          document.getElementById("ranked-flex").innerHTML = rankTier; 
           document.getElementById("ranked-flex-lp").innerHTML = element.leaguePoints+" LP";
-          document.getElementById("ranked-flex-winloss").innerHTML = Math.round(element.wins * 100 / (element.wins + element.losses)) + "%" + element.wins+"W "+element.losses+"L"; 
-          document.getElementById("ranked-flex-winrate").innerHTML = "Winrate: "+Math.round(element.wins * 100 / (element.wins + element.losses)) + "%";
+          document.getElementById("ranked-flex-winloss").innerHTML = Math.round(element.wins * 100 / (element.wins + element.losses)) + "% - "+element.wins+"W "+element.losses+"L";
         }
       })
+      if(!solo) { document.getElementById("rank-solo-check").style.display = "none"; }
+      if(!flex) { document.getElementById("rank-flex-check").style.display = "none"; }
     })
 }
 
