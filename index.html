@@ -9,7 +9,7 @@
   <title>League Check</title>
 </head>
 <script src="app.js"></script>
-<body onload="initIndex()">
+<body onload="initHome()">
   <main>
     <nav>
       <div class="nav-left">
@@ -21,12 +21,6 @@
         </div>
         <div class="nav-left-option">
           <h3>Stats</h3>
-        </div>
-        <div class="nav-left-option">
-          <h3>Leaderboard</h3>
-        </div>
-        <div class="nav-left-option">
-          <h3>Pros</h3>
         </div>
       </div>
       <div class="nav-right">
@@ -59,22 +53,22 @@
           
           <div class="home-form-search">
             <div class="home-form-search-name">
-              <input type="text" id="accountname" name="accountname" class="home-form-search-name-input" placeholder="Search League Account" autocomplete="off" spellcheck="false">
+              <input type="text" id="queryName" class="home-form-search-name-input" placeholder="Search League Account" autocomplete="off" spellcheck="false">
             </div>
             <img id="searchbutton"src="./assets/search-icon.svg"/>
           </div>
           <script>
-            var input = document.getElementById("accountname");
+            var input = document.getElementById("queryName");
             input.addEventListener("keydown", function(e) {
               if(e.key === "Enter") {
-                checkValidity(accountname);
+                searchAccount( queryName.value );
               }
             });
           </script>
           <script>
             var input = document.getElementById("searchbutton");
             input.addEventListener("click", function(e) {
-              checkValidity(accountname);
+              searchAccount( queryName.value );
             });
           </script>
         </form>
