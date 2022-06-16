@@ -6,7 +6,8 @@
 var devkey;
 var returnStatus;
 var searchRegion;
-var profileTab;
+var profileData;
+var storedAccounts;
 
 function initHome () {
   getDevKey("./dev-key.json");
@@ -22,7 +23,7 @@ function getDevKey(keyPath) {
       devkey = data.devkey;
       localStorage.setItem('devkey', devkey);
     })  
-    .catch(err => console.log(err))
+    .catch(err => console.error(err))
   }
   else 
     devkey = localStorage.getItem('devkey');
@@ -52,10 +53,16 @@ function containsSpecialChars(str) {
   return specialCharacters.test(str);
 }
 
+function formatName( input ) {
+  let output = input.toLowerCase();
+  return output.replace(/\s/g, '');
+
+}
+
 function searchAccount ( queryName ) {
   // this function is where we call the api to gather data
   // goal is to minimize api calls
-  
+  queryName = formatName( queryName );
   let queryRegion = searchRegion;
 
   // FUTURE: check if query is a multi account query
@@ -82,7 +89,7 @@ async function fetchAccountBasics ( queryRegion, queryName ) {
   try {
     let response = await fetch('https://'+queryRegion+'.api.riotgames.com/lol/summoner/v4/summoners/by-name/'+queryName+'?api_key='+devkey);
     if ( !response.ok )
-      throw new Error("Account not found");
+      throw new Error("Account basics not found");
     let data = await response.json();
     return data;
   } catch (error){
@@ -96,14 +103,13 @@ async function validAccountSearch( queryRegion, queryName, accountBasics ) {
   // check if account is in local storage
 
 
-  let storedAccounts = localStorage.getItem('accounts');
-  if ( storedAccounts == null ) {
+  storedAccounts = JSON.parse(localStorage.getItem('accounts'));
+  if ( storedAccounts === null ) {
     await updateAccountData( queryRegion, queryName, accountBasics );
   }
   else {
     let accountMatch = storedAccounts.find( element => element.id == accountBasics.id);
-    console.log(accountMatch);
-    if (accountMatch !== null) {
+    if (accountMatch !== undefined) {
       // check time since last update
     }
     else {
@@ -111,9 +117,8 @@ async function validAccountSearch( queryRegion, queryName, accountBasics ) {
     }
   }
 
-  // go to 
-  //window.location = ( './summoner/profile.html?region=' + searchRegion + '&name=' + queryName.value);
-  console.log("profile loaded");
+  // go to profile page
+  window.location = ( './summoner/profile.html?region=' + searchRegion + '&name=' + queryName);
 }
 
 async function updateAccountData ( queryRegion, queryName, accountBasics) {
@@ -124,26 +129,59 @@ async function updateAccountData ( queryRegion, queryName, accountBasics) {
   try {
     let response = await fetch('https://'+queryRegion+'.api.riotgames.com/lol/league/v4/entries/by-summoner/'+accountBasics.id+'?api_key='+devkey);
     if ( !response.ok )
-      throw new Error("Account not found");
+      throw new Error("Account rank not found");
     rankData = await response.json();
   } catch (error){
     console.error(error);
     rankData = -1;
   }
-  
-  console.log(accountBasics);
-  console.log(rankData);
-  
-  
-  // check accounts
 
+  
+  let account = {
+    id: accountBasics.id, 
+    name: queryName,
+    region: queryRegion,
+    data: [
+      accountBasics,
+      rankData,
+    ]
+  };
+  if ( storedAccounts === null ) {
+    storedAccounts = [
+      account,
+    ]
+  }
+  else {
+    storedAccounts.push(account);
+  }
 
-
-  let storedAccounts = localStorage.getItem('accounts');
+  localStorage.setItem('accounts', JSON.stringify(storedAccounts));
 }
 
-function invalidAccountSearch( queryRegion, queryName ) {
+function invalidAccountSearch ( queryRegion, queryName ) {
   console.log("Invalid account page coming later");
+}
+
+function initProfile () {
+  getDevKey("../dev-key.json");
+  fillProfileData(getParameter('region'), getParameter('name'));
+
+  // get account info from local storage
+  // if not in local storage go through checkvalidity
+  // if data is in local stroage, use method that
+  // fills the page with the saved data
+}
+
+function getParameter ( parameterName ) {
+  let parameters = new URLSearchParams( window.location.search );
+  return parameters.get( parameterName );
+}
+
+function fillProfileData ( queryRegion, queryName ) {
+  storedAccounts = JSON.parse(localStorage.getItem('accounts'));
+  console.log(queryName);
+  profileData = storedAccounts.find( element => element.name == queryName && element.region == queryRegion );
+  console.log(profileData);
 }
 
 
