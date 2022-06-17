@@ -6,6 +6,7 @@
 var devkey;
 var returnStatus;
 var searchRegion;
+var searchHistory;
 var profileData;
 var storedAccounts;
 
@@ -36,16 +37,47 @@ function setRegion ( queryRegion ) {
 }
 
 function getHistory () {
-  let list = document.getElementById("history");
-  list.innerHTMLHTML="";
-  if(localStorage.getItem('searchHistory') !== null) {
-    let searchHistory = JSON.parse(localStorage.getItem('searchHistory') );
-    searchHistory.accounts.forEach((acc)=>{
-      let li = document.createElement('li');
-      li.innerText = acc.name;
-      list.appendChild(li);
+  
+  searchHistory = JSON.parse(localStorage.getItem('searchHistory')); 
+  console.log(searchHistory);
+  if(searchHistory !== null) {
+    var list = document.getElementById("history");
+    list.innerHTMLHTML="";
+    searchHistory.forEach((account)=>{
+      var a = document.createElement("a");
+      var newItem = document.createElement("li");
+      a.textContent = account.queryName;
+      a.setAttribute('href', './summoner/profile.html?region=' + account.region + '&name=' + account.name);
+      newItem.appendChild(a);
+      list.appendChild(newItem);
     })
   }
+  else {
+    searchHistory = [];
+  }
+}
+
+function addToHistory ( queryRegion, name, accountBasics ) {
+  let queryName = accountBasics.name;
+  let inputAccount = {
+    region: queryRegion,
+    name: name,
+    queryName: queryName,
+  }
+
+  let match = false;
+  searchHistory.forEach( (element, index, arr) => {
+    if ( element.name === name && element.region == queryRegion ) {
+      arr.splice(index, 1);
+      match = true;
+    }
+  })
+  searchHistory.unshift(inputAccount);
+  if ( searchHistory.length > 10 ) 
+    searchHistory.pop();
+
+  localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+  
 }
 
 function containsSpecialChars(str) {
@@ -62,32 +94,32 @@ function formatName( input ) {
 function searchAccount ( queryName ) {
   // this function is where we call the api to gather data
   // goal is to minimize api calls
-  queryName = formatName( queryName );
+  let name = formatName( queryName );
   let queryRegion = searchRegion;
 
   // FUTURE: check if query is a multi account query
 
   // first, sanitize account name
-  if ( containsSpecialChars( queryName ) || queryName.length < 3 || queryName.length > 16 ) {
+  if ( containsSpecialChars( name ) || name.length < 3 || name.length > 16 ) {
     return;
   }
 
   // fetch account basics to see if it exists
-  let accountBasics = fetchAccountBasics( queryRegion, queryName );
+  let accountBasics = fetchAccountBasics( queryRegion, name );
 
   // use output the promise to handle the query appropriately
   accountBasics.then((output) => {
     if ( output === -1 ) {
-      invalidAccountSearch( queryRegion, queryName );
+      invalidAccountSearch( queryRegion, name );
     }
     else 
-      validAccountSearch( queryRegion, queryName, output );
+      validAccountSearch( queryRegion, name, output );
   });
 }
 
-async function fetchAccountBasics ( queryRegion, queryName ) {
+async function fetchAccountBasics ( queryRegion, name ) {
   try {
-    let response = await fetch('https://'+queryRegion+'.api.riotgames.com/lol/summoner/v4/summoners/by-name/'+queryName+'?api_key='+devkey);
+    let response = await fetch('https://'+queryRegion+'.api.riotgames.com/lol/summoner/v4/summoners/by-name/'+name+'?api_key='+devkey);
     if ( !response.ok )
       throw new Error("Account basics not found");
     let data = await response.json();
@@ -98,14 +130,14 @@ async function fetchAccountBasics ( queryRegion, queryName ) {
   }
 }
 
-async function validAccountSearch( queryRegion, queryName, accountBasics ) {
+async function validAccountSearch( queryRegion, name, accountBasics ) {
   // account is valid and we have the encrypted id
   // check if account is in local storage
 
 
   storedAccounts = JSON.parse(localStorage.getItem('accounts'));
   if ( storedAccounts === null ) {
-    await updateAccountData( queryRegion, queryName, accountBasics );
+    await updateAccountData( queryRegion, name, accountBasics );
   }
   else {
     let accountMatch = storedAccounts.find( element => element.id == accountBasics.id);
@@ -113,15 +145,17 @@ async function validAccountSearch( queryRegion, queryName, accountBasics ) {
       // check time since last update
     }
     else {
-      await updateAccountData( queryRegion, queryName, accountBasics );
+      await updateAccountData( queryRegion, name, accountBasics );
     }
   }
-
+  // add to search history
+  addToHistory( queryRegion, name, accountBasics );
+  
   // go to profile page
-  window.location = ( './summoner/profile.html?region=' + searchRegion + '&name=' + queryName);
+  window.location = ( './summoner/profile.html?region=' + searchRegion + '&name=' + name);
 }
 
-async function updateAccountData ( queryRegion, queryName, accountBasics) {
+async function updateAccountData ( queryRegion, name, accountBasics) {
   // location of fetch for rank and match history
   // fetch('https://'+queryRegion+'.api.riotgames.com/lol/league/v4/entries/by-summoner/'+accountBasics.id+'?api_key='+devkey)
   var rankData;
@@ -139,7 +173,7 @@ async function updateAccountData ( queryRegion, queryName, accountBasics) {
   
   let account = {
     id: accountBasics.id, 
-    name: queryName,
+    name: name,
     region: queryRegion,
     data: [
       accountBasics,
@@ -179,9 +213,51 @@ function getParameter ( parameterName ) {
 
 function fillProfileData ( queryRegion, queryName ) {
   storedAccounts = JSON.parse(localStorage.getItem('accounts'));
-  console.log(queryName);
   profileData = storedAccounts.find( element => element.name == queryName && element.region == queryRegion );
-  console.log(profileData);
+  document.getElementById("profile-icon").src = 'http://ddragon.leagueoflegends.com/cdn/12.11.1/img/profileicon/'+profileData.data[0].profileIconId+'.png';  
+  document.getElementById("summoner-level").innerHTML = profileData.data[0].summonerLevel;
+  document.getElementById("profile-name").innerHTML = profileData.data[0].name;
+  document.title = profileData.data[0].name+" - Profile";
+
+  let rankData = profileData.data[1];
+
+  let solo = false, flex = false;
+
+  rankData.forEach(element => {
+      if(element.queueType === "RANKED_SOLO_5x5") {
+      solo = true;
+      document.getElementById("rank-solo-unranked").style.display = "none";
+      document.getElementById("db-solo-text1").innerHTML = "Ranked";
+      document.getElementById("db-solo-text2").innerHTML = "Solo/Duo";
+      document.getElementById("ranked-solo-icon").src = '../assets/ranked-icons/'+element.tier.toLowerCase()+'.webp';
+      let rankTier = element.tier.charAt(0) + element.tier.substr(1).toLowerCase();
+      if (rankTier == "Master" || rankTier == "Grandmaster" || rankTier == "Challenger") {
+
+      }
+      else { rankTier = rankTier+" "+element.rank; }
+      document.getElementById("ranked-solo").innerHTML = rankTier; 
+      document.getElementById("ranked-solo-lp").innerHTML = element.leaguePoints+" LP";
+      document.getElementById("ranked-solo-winloss").innerHTML = Math.round(element.wins * 100 / (element.wins + element.losses)) + "% - "+element.wins+"W "+element.losses+"L";
+    }
+    else if (element.queueType === "RANKED_FLEX_SR") {
+      flex = true;
+      document.getElementById("rank-flex-unranked").style.display = "none";
+      document.getElementById("db-flex-text1").innerHTML = "Ranked";
+      document.getElementById("db-flex-text2").innerHTML = "Flex";
+      document.getElementById("ranked-flex-icon").src = '../assets/ranked-icons/'+element.tier.toLowerCase()+'.webp';
+      let rankTier = element.tier.charAt(0) + element.tier.substr(1).toLowerCase();
+      if (rankTier == "Master" || rankTier == "Grandmaster" || rankTier == "Challenger") {
+
+      }
+      else { rankTier = rankTier+" "+element.rank; }
+      document.getElementById("ranked-flex").innerHTML = rankTier; 
+      document.getElementById("ranked-flex-lp").innerHTML = element.leaguePoints+" LP";
+      document.getElementById("ranked-flex-winloss").innerHTML = Math.round(element.wins * 100 / (element.wins + element.losses)) + "% - "+element.wins+"W "+element.losses+"L";
+    }
+  })
+  if(!solo) { document.getElementById("rank-solo-check").style.display = "none"; }
+  if(!flex) { document.getElementById("rank-flex-check").style.display = "none"; }
+  
 }
 
 
@@ -451,7 +527,3 @@ function fillProfileData ( queryRegion, queryName ) {
 //     localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
 //   } 
 // }
-
-
-
-

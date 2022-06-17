@@ -101,6 +101,7 @@ nav {
 .home-section {
   margin: auto;
   font-family: 'Inter', sans-serif;
+  padding-bottom: 10vh;
 }
 
 .home-content {
@@ -116,7 +117,8 @@ nav {
 
 
 .home-greeting img {
-  height: 35vh;
+  height: 40vh;
+  max-height: 400px;
 }
 
 .home-form {
@@ -221,6 +223,17 @@ ul {
   -moz-columns: 2;
   column-gap: 75px;
   color: white;
+}
+
+a {
+  font-family: 'Inter', sans-serif;
+  color: white;
+  text-decoration: none;
+}
+
+a:hover {
+  
+  text-decoration: underline;
 }
 
 
