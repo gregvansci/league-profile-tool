@@ -9,6 +9,7 @@ var searchRegion;
 var searchHistory;
 var profileData;
 var storedAccounts;
+var matchList;
 
 function initHome () {
   getDevKey("./dev-key.json");
@@ -136,6 +137,7 @@ async function fetchAccountBasics ( queryRegion, name ) {
     let response = await fetch('https://'+queryRegion+'.api.riotgames.com/lol/summoner/v4/summoners/by-name/'+name+'?api_key='+devkey);
     if ( !response.ok )
       throw new Error("Account basics not found");
+    console.log("api call basics");
     let data = await response.json();
     return data;
   } catch (error){
@@ -173,11 +175,11 @@ async function updateAccountData ( queryRegion, name, accountBasics) {
   // location of fetch for rank and match history
   // fetch('https://'+queryRegion+'.api.riotgames.com/lol/league/v4/entries/by-summoner/'+accountBasics.id+'?api_key='+devkey)
   var rankData;
-  var matchData;
   try {
     let response = await fetch('https://'+queryRegion+'.api.riotgames.com/lol/league/v4/entries/by-summoner/'+accountBasics.id+'?api_key='+devkey);
     if ( !response.ok )
       throw new Error("Account rank not found");
+    console.log("api call rank");
     rankData = await response.json();
   } catch (error){
     console.error(error);
@@ -211,9 +213,15 @@ function invalidAccountSearch ( queryRegion, queryName ) {
 }
 
 function initProfile () {
+  let region = getParameter('region');
+  let name = getParameter('name');
+  storedAccounts = JSON.parse(localStorage.getItem('accounts'));
+  profileData = storedAccounts.find( element => element.name == name && element.region == region );
+  console.log(profileData);
   getDevKey("../dev-key.json");
-  fillProfileData(getParameter('region'), getParameter('name'));
-
+  fillProfileData(region, name);
+  fetchMatchData(region, name);
+  //fillMatchData(region, name);
   // get account info from local storage
   // if not in local storage go through checkvalidity
   // if data is in local stroage, use method that
@@ -225,14 +233,11 @@ function getParameter ( parameterName ) {
   return parameters.get( parameterName );
 }
 
-function fillProfileData ( queryRegion, queryName ) {
-  storedAccounts = JSON.parse(localStorage.getItem('accounts'));
-  profileData = storedAccounts.find( element => element.name == queryName && element.region == queryRegion );
+function fillProfileData ( region, name ) {
   document.getElementById("profile-icon").src = 'http://ddragon.leagueoflegends.com/cdn/12.11.1/img/profileicon/'+profileData.data[0].profileIconId+'.png';  
   document.getElementById("summoner-level").innerHTML = profileData.data[0].summonerLevel;
   document.getElementById("profile-name").innerHTML = profileData.data[0].name;
   document.title = profileData.data[0].name+" - Profile";
-
   let rankData = profileData.data[1];
 
   let solo = false, flex = false;
@@ -274,270 +279,58 @@ function fillProfileData ( queryRegion, queryName ) {
   
 }
 
-
-// async function fetchAccount (queryRegion, queryName) { 
-//   let accountInfo = await fetch('https://'+queryRegion+'.api.riotgames.com/lol/summoner/v4/summoners/by-name/'+queryName+'?api_key='+devkey);
-//   let accountInfoJson = await accountInfo.json();
-//   return accountInfoJson;
-// } 
-
-
-
-
-// function initIndex() {
-//   getDevKey("./dev-key.json");
-//   searchRegion = "na1";
-//   getHistory();
-// }
-
-// function getDevKey(keyPath) {
-//   if (localStorage.getItem('devkey') === null) {
-//     fetch(keyPath)
-//     .then(response => response.json())
-//     .then(data => {
-//       devkey = data.devkey;
-//       localStorage.setItem('devkey', devkey);
-//     })  
-//   }
-//   else 
-//     devkey = localStorage.getItem('devkey');
-// }
-
-
-// function getHistory() {
-//   let list = document.getElementById("history");
-//   list.innerHTMLHTML="";
-//   if(localStorage.getItem('searchHistory') !== null) {
-//     let searchHistory = JSON.parse(localStorage.getItem('searchHistory') );
-//     searchHistory.accounts.forEach((acc)=>{
-//       let li = document.createElement('li');
-//       li.innerText = acc.name;
-//       list.appendChild(li);
-//     })
-//   }
-// }
-
-// function setRegion(region) {
-//   document.getElementById(searchRegion).classList.replace('region-icon-selected', 'region-icon-nonselected');
-//   searchRegion = region;
-//   document.getElementById(searchRegion).classList.replace('region-icon-nonselected', 'region-icon-selected');
-// }
-
-// function containsSpecialChars(str) {
-//   const specialCharacters = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
-//   return specialCharacters.test(str);
-// }
-
-// function testFunction() {
-//   console.log("test function output");
-// }
-
-// function checkValidity( queryName ) {
-//   queryName = queryName.value;
-//   let queryRegion = searchRegion;
-//   // check if multi lookup
-//   if(/[,]/.test( queryName )) {
-//     console.log("Multi Profile Lookup")
-//   }
-
-//   // check if single lookup is valid
-//   else if (!containsSpecialChars( queryName ) && queryName.length >= 3 && queryName.length <= 16 ) {
-//     // method to get account info
-//     var accounts = localStorage.getItem('accounts');
-//     if (accounts === null) {
-//       accounts = [];
-//       console.log("accounts doesn't exist");
-//       console.log(accounts);
-//       // api call accounts
-
-//       let accountInfo = fetchAccount( queryRegion, queryName );
-//       console.log(accountInfo);
-
+async function fetchMatchData ( region, name ) {
+  var matchData;
+  var apiRegion = getContinent(region);
+  var puuid = profileData.data[0].puuid;
+  try {
+    let response = await fetch('https://'+apiRegion+'.api.riotgames.com/lol/match/v5/matches/by-puuid/'+puuid+'/ids?start=0&count=10&api_key='+devkey);
+    if( !response.ok )
+      throw new Error("Account match history not found");
+    console.log("api call match list");
+    matchList = await response.json();
+  } catch (error) {
+    console.error(error);
+    matchList = -1;
+  }
+  console.log(matchList);
+  matchData = profileData.data[2];
+  matchList.forEach(element => {
+    if( matchData != null ) {
+      let matchFound = matchData.find( innerElement => innerElement == element);
+      if( matchFound !== undefined ) {
+        console.log("match already stored");
+      }
+      else {
+        console.log("match not found");
+        fetchMatchDetails(element);
+      }
+    }
+    else {
+      let matchDetails = fetchMatchDetails();
+      matchData =
+        [
+          {
+            element: matchDetails,
+          }
+        ]
+        
       
-//       fetchAccount(  searchRegion, queryName );
-//       // if account found
-//       // api call its info
-//       // create accounts and input account
-//       // else go to account not found page
-//       // 
-//     }
-//     else {
-//       let account = accounts.find(element => {
-//         return element.name === queryName && element.region === searchRegion;
-//       })
-//       if (account === null) {
-//         // api call
-//         // if account found
-//         // add account to accounts
-//         // else go to account not found page
-//       }
-//       else {
-//         // account is found
-//         // check when last updated
-//         // if updated within five minutes
-//         // no api call
-//         // else update certain info
-//         // go to profile page
-//       }
-//     }
-    
-    
-//     // check localstorage for account info
-//     // if found, use it to fill out page info
-//     // if not found, api call
-//     // if api call found, save info and go to page
-//     // if api call not found, go to notfound html page
-    
-    
-//     //window.location = ( './summoner/profile.html?region=' + searchRegion + '&name=' + queryName.value);
-//   }
-// }
+      console.log(matchData)
+    }
+  })
+}
 
-// async function fetchAccount (queryRegion, queryName) { 
-//   let accountInfo = await fetch('https://'+queryRegion+'.api.riotgames.com/lol/summoner/v4/summoners/by-name/'+queryName+'?api_key='+devkey);
-//   let accountInfoJson = await accountInfo.json();
-//   return accountInfoJson;
-// } 
+async function fetchMatchDetails ( matchID ) {
+  console.log(matchID);
+  return 1;
+}
 
-
-// function fetchAccountDetails ( queryRegion, queryName ) {
-  
-// }
-
-// function addToAccounts ( queryName ) {
-
-// }
-
-
-
-
-
-
-// function initProfile() {
-//   getDevKey("../dev-key.json");
-//   searchAccount(); 
-
-//   // get account info from local storage
-//   // if not in local storage go through checkvalidity
-//   // if data is in local stroage, use method that
-//   // fills the page with the saved data
-// }
-
-
-// function getParameter ( parameterName ) {
-//   let parameters = new URLSearchParams( window.location.search );
-//   return parameters.get( parameterName );
-// }
-
-
-// function goHome() {
-//   window.location = ("../");
-// }
-
-// function searchAccount() {
-//   // get parameters
-//   let region = getParameter('region');
-//   let name = getParameter("name");
-
-//   // assume account is valid for now
-//   // fetch summoner by name
-//   // https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/' + name + '?api_key=' + devkey
-//   fetchSummonerByName( region, name )
-
-  
-  
-//   // if account found add it to the history
-//   addToHistory( region, name );
-// }
-
-// function fetchSummonerByName( region,name ) {
-//   var output;
-//   fetch('https://'+region+'.api.riotgames.com/lol/summoner/v4/summoners/by-name/'+name+'?api_key='+devkey)
-//     .then(res => res.json())
-//     .then(data => {
-//       console.log(data);
-//       if(data.hasOwnProperty("status")) {console.log("account doesn't exist")}
-//       else {
-//         document.getElementById("profile-icon").src = 'http://ddragon.leagueoflegends.com/cdn/12.11.1/img/profileicon/'+data.profileIconId+'.png';  
-//         document.getElementById("summoner-level").innerHTML = data.summonerLevel;
-//         document.getElementById("profile-name").innerHTML = data.name;
-//         document.title = data.name+" - Profile";
-//         fetchEntriesBySummoner( region, data.id)
-//       }
-      
-//     })
-// }
-
-// // test case accounts:
-// // 5ombre -> neither
-// // Kim Down -> both solo and flex ranked
-// // Sonder -> only flex ranked
-
-
-// function fetchEntriesBySummoner( region, id ) {
-//   fetch('https://'+region+'.api.riotgames.com/lol/league/v4/entries/by-summoner/'+id+'?api_key='+devkey)
-//     .then(res => res.json())
-//     .then(data => {
-//       console.log(data);
-//       let solo = false, flex = false;
-
-//       data.forEach(element => {
-//           if(element.queueType === "RANKED_SOLO_5x5") {
-//           solo = true;
-//           document.getElementById("rank-solo-unranked").style.display = "none";
-//           document.getElementById("db-solo-text1").innerHTML = "Ranked";
-//           document.getElementById("db-solo-text2").innerHTML = "Solo/Duo";
-//           document.getElementById("ranked-solo-icon").src = '../assets/ranked-icons/'+element.tier.toLowerCase()+'.webp';
-//           let rankTier = element.tier.charAt(0) + element.tier.substr(1).toLowerCase();
-//           if (rankTier == "Master" || rankTier == "Grandmaster" || rankTier == "Challenger") {
-
-//           }
-//           else { rankTier = rankTier+" "+element.rank; }
-//           document.getElementById("ranked-solo").innerHTML = rankTier; 
-//           document.getElementById("ranked-solo-lp").innerHTML = element.leaguePoints+" LP";
-//           document.getElementById("ranked-solo-winloss").innerHTML = Math.round(element.wins * 100 / (element.wins + element.losses)) + "% - "+element.wins+"W "+element.losses+"L";
-//         }
-//         else if (element.queueType === "RANKED_FLEX_SR") {
-//           flex = true;
-//           document.getElementById("rank-flex-unranked").style.display = "none";
-//           document.getElementById("db-flex-text1").innerHTML = "Ranked";
-//           document.getElementById("db-flex-text2").innerHTML = "Flex";
-//           document.getElementById("ranked-flex-icon").src = '../assets/ranked-icons/'+element.tier.toLowerCase()+'.webp';
-//           let rankTier = element.tier.charAt(0) + element.tier.substr(1).toLowerCase();
-//           if (rankTier == "Master" || rankTier == "Grandmaster" || rankTier == "Challenger") {
-
-//           }
-//           else { rankTier = rankTier+" "+element.rank; }
-//           document.getElementById("ranked-flex").innerHTML = rankTier; 
-//           document.getElementById("ranked-flex-lp").innerHTML = element.leaguePoints+" LP";
-//           document.getElementById("ranked-flex-winloss").innerHTML = Math.round(element.wins * 100 / (element.wins + element.losses)) + "% - "+element.wins+"W "+element.losses+"L";
-//         }
-//       })
-//       if(!solo) { document.getElementById("rank-solo-check").style.display = "none"; }
-//       if(!flex) { document.getElementById("rank-flex-check").style.display = "none"; }
-//     })
-// }
-
-// function addToHistory( region, name ) {  
-//   let inputAccount = {
-//     region: region,
-//     name: name
-//   };
-
-//   if (localStorage.getItem('searchHistory') === null) {
-//     firstInput = {
-//       accounts: [inputAccount]
-//     };
-//     localStorage.setItem('searchHistory', JSON.stringify(firstInput));
-//   }
-//   else {
-//     let searchHistory = JSON.parse(localStorage.getItem('searchHistory') );
-//     searchHistory.accounts.unshift(inputAccount);
-//     // line is not working correctly
-//     // searchHistory.accounts = [...new Set(searchHistory.accounts)];
-//     if (searchHistory.accounts.length > 10) {
-//       searchHistory.accounts.pop();
-//     }
-//     localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
-//   } 
-// }
+function getContinent ( region ) {
+  if( region === 'na1' )
+    return 'americas';
+  if( region === 'kr' )
+    return 'asia';
+  if( region === 'euw1' || region === 'eun1' ) 
+    return 'europe';
+}
