@@ -16,7 +16,9 @@ main {
   margin: 0;
   display: flex;
   flex-direction: column;
+  min-width: 850px;
   height: 100vh;
+  min-height: 600px;
   /*
   background-image: url("./assets/background-image.jpg");
   background-size:cover;
@@ -89,7 +91,7 @@ nav {
   padding-left: 20px;
   padding-top: 20px;
   padding-bottom: 20px;
-  font-size: 1rem;
+  height: 1rem;
   font-weight: 400;
   filter: invert(78%) sepia(5%) saturate(40%) hue-rotate(316deg) brightness(87%) contrast(88%);
 }
@@ -191,6 +193,7 @@ nav {
 .home-form-search-name {
   margin-top: auto;
   margin-bottom: auto;
+  width: 100%;
 }
 
 .home-form-search-name-input {
@@ -198,7 +201,7 @@ nav {
   outline: none;
   height: 30px;   
   padding: 0;
-  width: 100%; 
+  width: 100%;
 }
 
 .home-search-history {
@@ -217,7 +220,7 @@ nav {
 }
 
 
-ul {
+.home-search-history-list ul {
   columns: 2;
   -webkit-columns: 2;
   -moz-columns: 2;
@@ -225,13 +228,13 @@ ul {
   color: white;
 }
 
-a {
+.home-search-history-list a {
   font-family: 'Inter', sans-serif;
   color: white;
   text-decoration: none;
 }
 
-a:hover {
+.home-search-history-list a:hover {
   
   text-decoration: underline;
 }
@@ -276,6 +279,7 @@ a:hover {
 
 .dashboard-left-tile-name-icon img {
   width: 8vw;
+  min-width: 100px;
   border: 3px solid #B05E27;
   border-radius: 8px;
   overflow: hidden;
@@ -365,6 +369,7 @@ a:hover {
 }
 
 .dashboard-left-tile-rank-info h5 {
+  font-size: .8rem;
   color: #CCC;
 }
 
@@ -377,6 +382,7 @@ a:hover {
   display: flex;
   flex-direction: column;
   width: 100%;
+  min-width: 400px;
 }
 
 .dashboard-main-nav {

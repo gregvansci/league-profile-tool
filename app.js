@@ -14,6 +14,20 @@ function initHome () {
   getDevKey("./dev-key.json");
   searchRegion = "na1";
   getHistory();
+
+  const toggle = document.getElementById('themeSelect');
+  toggle.addEventListener('click', () => {
+    if ( this.src == "./assets/dark-theme-icon.svg") {
+      console.log('if');
+      this.src = "./assets/light-theme-icon.svg";
+      console.log(this.src);
+    }
+    else {
+      console.log('else');
+      this.src = "./assets/dark-theme-icon.svg";
+      console.log(this.src);
+    }
+  })
 }
 
 function getDevKey(keyPath) {
