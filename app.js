@@ -216,12 +216,10 @@ function initProfile () {
   let region = getParameter('region');
   let name = getParameter('name');
   storedAccounts = JSON.parse(localStorage.getItem('accounts'));
-  profileData = storedAccounts.find( element => element.name == name && element.region == region );
-  console.log(profileData);
+  profileData = storedAccounts.find( element => element.name == name && element.region == region ); 
   getDevKey("../dev-key.json");
   fillProfileData(region, name);
   fetchMatchData(region, name);
-  //fillMatchData(region, name);
   // get account info from local storage
   // if not in local storage go through checkvalidity
   // if data is in local stroage, use method that
@@ -284,7 +282,7 @@ async function fetchMatchData ( region, name ) {
   var apiRegion = getContinent(region);
   var puuid = profileData.data[0].puuid;
   try {
-    let response = await fetch('https://'+apiRegion+'.api.riotgames.com/lol/match/v5/matches/by-puuid/'+puuid+'/ids?start=0&count=10&api_key='+devkey);
+    let response = await fetch('https://'+apiRegion+'.api.riotgames.com/lol/match/v5/matches/by-puuid/'+puuid+'/ids?start=0&count=5&api_key='+devkey);
     if( !response.ok )
       throw new Error("Account match history not found");
     console.log("api call match list");
@@ -293,38 +291,61 @@ async function fetchMatchData ( region, name ) {
     console.error(error);
     matchList = -1;
   }
-  console.log(matchList);
+
   matchData = profileData.data[2];
-  matchList.forEach(element => {
-    if( matchData != null ) {
-      let matchFound = matchData.find( innerElement => innerElement == element);
+
+  for (const element of matchList) {
+    var matchDetails;
+    if( matchData !== undefined ) {
+      let matchFound = matchData.find( innerElement => innerElement.matchID == element);
       if( matchFound !== undefined ) {
         console.log("match already stored");
       }
       else {
-        console.log("match not found");
-        fetchMatchDetails(element);
+        console.log("match not in history");
+        matchDetails = await fetchMatchDetails(apiRegion, element);
+        matchData.push({
+          matchID: element,
+          matchDetails,
+        })
       }
     }
     else {
-      let matchDetails = fetchMatchDetails();
-      matchData =
-        [
-          {
-            element: matchDetails,
-          }
-        ]
-        
-      
-      console.log(matchData)
+      console.log("match not in history");
+      matchDetails = await fetchMatchDetails(apiRegion, element);
+      matchData = [
+        {
+          matchID: element,
+          matchDetails,
+        }
+      ];
     }
-  })
+  }
+  if( profileData.data[2] == null && profileData.data.length === 2)
+    profileData.data.push(matchData);
+  else 
+    profileData.data[2] = matchData;
+
+  console.log(storedAccounts);
+  localStorage.setItem('accounts', JSON.stringify(storedAccounts));
 }
 
-async function fetchMatchDetails ( matchID ) {
-  console.log(matchID);
-  return 1;
+async function fetchMatchDetails ( apiRegion, matchID ) {
+  var output;
+  try {
+    let response = await fetch('https://'+apiRegion+'.api.riotgames.com/lol/match/v5/matches/'+matchID+'?api_key='+devkey)
+    if( !response.ok )
+      throw new Error("Match details not found for: "+matchID);
+    console.log("api call match details");
+    output = await response.json();
+  } catch (error) {
+    console.error(error);
+    output = -1;
+  }
+  return output;
 }
+
+function fillMatchData(region, name) {}
 
 function getContinent ( region ) {
   if( region === 'na1' )
