@@ -282,7 +282,7 @@ async function fetchMatchData ( region, name ) {
   var apiRegion = getContinent(region);
   var puuid = profileData.data[0].puuid;
   try {
-    let response = await fetch('https://'+apiRegion+'.api.riotgames.com/lol/match/v5/matches/by-puuid/'+puuid+'/ids?start=0&count=5&api_key='+devkey);
+    let response = await fetch('https://'+apiRegion+'.api.riotgames.com/lol/match/v5/matches/by-puuid/'+puuid+'/ids?start=0&count=8&api_key='+devkey);
     if( !response.ok )
       throw new Error("Account match history not found");
     console.log("api call match list");
@@ -293,7 +293,6 @@ async function fetchMatchData ( region, name ) {
   }
 
   matchData = profileData.data[2];
-
   for (const element of matchList) {
     var matchDetails;
     if( matchData !== undefined ) {
@@ -320,6 +319,7 @@ async function fetchMatchData ( region, name ) {
         }
       ];
     }
+    fillMatchData( name, element )
   }
   if( profileData.data[2] == null && profileData.data.length === 2)
     profileData.data.push(matchData);
@@ -345,7 +345,20 @@ async function fetchMatchDetails ( apiRegion, matchID ) {
   return output;
 }
 
-function fillMatchData(region, name) {}
+function fillMatchData( name, matchID) {
+  var matchInfo = profileData.data[2].find(element => element.matchID == matchID);
+  var parIndex = matchInfo.matchDetails.metadata.participants.indexOf(profileData.data[0].puuid);
+
+  var list = document.getElementById("match-list");
+
+  var a = document.createElement("a");
+  var newItem = document.createElement("li");
+  a.textContent = matchInfo.matchDetails.info.participants[parIndex].win ? "Win" : "Loss";
+  newItem.appendChild(a);
+  list.appendChild(newItem);
+
+  
+}
 
 function getContinent ( region ) {
   if( region === 'na1' )
