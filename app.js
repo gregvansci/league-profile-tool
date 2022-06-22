@@ -54,7 +54,6 @@ function setRegion ( queryRegion ) {
 function getHistory () {
   
   searchHistory = JSON.parse(localStorage.getItem('searchHistory')); 
-  console.log(searchHistory);
   if(searchHistory !== null) {
     var list = document.getElementById("history");
     list.innerHTMLHTML="";
@@ -219,7 +218,7 @@ function initProfile () {
   profileData = storedAccounts.find( element => element.name == name && element.region == region ); 
   getDevKey("../dev-key.json");
   fillProfileData(region, name);
-  fetchMatchData(region, name);
+  fetchMatchData(region);
   // get account info from local storage
   // if not in local storage go through checkvalidity
   // if data is in local stroage, use method that
@@ -277,12 +276,12 @@ function fillProfileData ( region, name ) {
   
 }
 
-async function fetchMatchData ( region, name ) {
+async function fetchMatchData ( region ) {
   var matchData;
   var apiRegion = getContinent(region);
   var puuid = profileData.data[0].puuid;
   try {
-    let response = await fetch('https://'+apiRegion+'.api.riotgames.com/lol/match/v5/matches/by-puuid/'+puuid+'/ids?start=0&count=20&api_key='+devkey);
+    let response = await fetch('https://'+apiRegion+'.api.riotgames.com/lol/match/v5/matches/by-puuid/'+puuid+'/ids?start=0&count=8&api_key='+devkey);
     if( !response.ok )
       throw new Error("Account match history not found");
     console.log("api call match list");
@@ -307,6 +306,10 @@ async function fetchMatchData ( region, name ) {
           matchID: element,
           matchDetails,
         })
+        if( profileData.data[2] == null && profileData.data.length === 2)
+          profileData.data.push(matchData);
+        else 
+          profileData.data[2] = matchData;
       }
     }
     else {
@@ -318,16 +321,18 @@ async function fetchMatchData ( region, name ) {
           matchDetails,
         }
       ];
+      if( profileData.data[2] == null && profileData.data.length === 2)
+        profileData.data.push(matchData);
+      else 
+        profileData.data[2] = matchData;
+
+      
     }
-    fillMatchData( element )
+    fillMatchData( element );
   }
-  if( profileData.data[2] == null && profileData.data.length === 2)
-    profileData.data.push(matchData);
-  else 
-    profileData.data[2] = matchData;
+  
 
   console.log(storedAccounts);
-  localStorage.setItem('accounts', JSON.stringify(storedAccounts));
 }
 
 async function fetchMatchDetails ( apiRegion, matchID ) {
@@ -346,6 +351,7 @@ async function fetchMatchDetails ( apiRegion, matchID ) {
 }
 
 function fillMatchData ( matchID ) {
+  console.log(profileData);
   var matchInfo = profileData.data[2].find(element => element.matchID == matchID);
   var parIndex = matchInfo.matchDetails.metadata.participants.indexOf(profileData.data[0].puuid);
 
