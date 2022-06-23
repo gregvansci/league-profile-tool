@@ -469,6 +469,7 @@ nav {
 .match-team-comp {
   display: flex;
   flex-direction: column;
+  
 }
 
 .match-team-comp-role {
@@ -478,6 +479,7 @@ nav {
   align-items: center;
   gap: 8px;
   color: #CCC;
+  height: .875rem;
 }
 
 .match-team-comp-role a {
@@ -489,15 +491,16 @@ nav {
   text-overflow: ellipsis;
 }
 .match-champ-icon img{
-  width: .875rem;
-  height: .875rem;
+  width: .75rem;
+  height: .75rem;
   border-radius: 50%;
   border:solid 1px #D4AC2B;
+  
 }
 
 .match-role-icon img{
-  width: .5rem;
-  height: .5rem;
+  width: .625rem;
+  height: .625rem;
 }
 
 /* width */
