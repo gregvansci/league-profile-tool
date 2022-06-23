@@ -328,7 +328,7 @@ async function fetchMatchData ( region ) {
 
       
     }
-    fillMatchData( element );
+    //fillMatchData( element );
   }
   
 
@@ -350,8 +350,7 @@ async function fetchMatchDetails ( apiRegion, matchID ) {
   return output;
 }
 
-function fillMatchData ( matchID ) {
-  console.log(profileData);
+function fillMatchData ( matchID ) {  
   var matchInfo = profileData.data[2].find(element => element.matchID == matchID);
   var parIndex = matchInfo.matchDetails.metadata.participants.indexOf(profileData.data[0].puuid);
 

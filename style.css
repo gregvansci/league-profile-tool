@@ -104,7 +104,7 @@ nav {
 
 .home-content {
   width: 50vw;
-  border-radius: 10px;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -259,7 +259,7 @@ nav {
 
 .dashboard-left-tile {
   background-color: hsl(243, 30%, 26%);
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 .dashboard-left-tile-name {
@@ -277,7 +277,7 @@ nav {
   width: 8vw;
   min-width: 100px;
   border: 3px solid #B05E27;
-  border-radius: 8px;
+  border-radius: 9px;
   overflow: hidden;
 }
 
@@ -286,13 +286,16 @@ nav {
   bottom: -25px;
   left: 50%;
   padding: 2px;
+  padding-left: 5px;
+  padding-right: 5px;
   transform: translate(-50%);
   background-color: #7E370C;
   font-weight: 600;
-  border-radius: 5px;
+  border-radius: 6px;
 }
 
 .dashboard-left-tile-name h2 {
+  margin-bottom: 15px;
   margin-top: 5px;
 }
 
@@ -431,6 +434,7 @@ nav {
   flex-direction: column;
   gap: 20px;
   height: 100%;
+  min-width: 600px;
   overflow: auto;
   font-family: 'Inter', sans-serif;
 }
@@ -450,12 +454,16 @@ nav {
 }
 
 .dashboard-main-content-match {
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 10px;
   margin: 0;
+  height: 100px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+  padding-left: 30px;
+  padding-right: 30px;
 }
 
 .dashboard-main-content-match.win {
@@ -466,23 +474,62 @@ nav {
   background-color: hsl(356, 50%, 26%);
 }
 
-.match-team-comp {
+.match-tile-info {
   display: flex;
   flex-direction: column;
+}
+
+.match-tile-info-header {
+  height: 20px;
+}
+
+.match-tile-info-header span {
+  font-size: .75rem;
+  font-size: 500;
+  margin: auto;
+}
+
+.match-tile-info-header strong{
+  font-size: .75rem;
+  font-weight: 600;
+  margin: auto;
+}
+
+.match-tile-info-content {
+  height: 80px;
+  display: flex;
+  flex-direction: row;
+}
+
+.match-tile-info-content-1 {
+
+}
+
+.match-tile-info-content-2 {
   
 }
 
-.match-team-comp-role {
+.match-tile-info-content-3 {
+  
+}
+
+.match-tile-comp {
+  display: flex;
+  flex-direction: column;
+  height: 100px;
+}
+
+.match-tile-comp-role {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   gap: 8px;
   color: #CCC;
-  height: .875rem;
+  height: 1.125rem;
 }
 
-.match-team-comp-role a {
+.match-tile-comp-role a {
   font-size: .625rem;
   display: inline-block;
   width: 50px;
@@ -491,11 +538,8 @@ nav {
   text-overflow: ellipsis;
 }
 .match-champ-icon img{
-  width: .75rem;
-  height: .75rem;
-  border-radius: 50%;
-  border:solid 1px #D4AC2B;
-  
+  width: 1rem;
+  height: 1rem;
 }
 
 .match-role-icon img{
