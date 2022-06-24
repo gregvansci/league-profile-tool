@@ -294,6 +294,7 @@ async function fetchMatchData ( region ) {
   matchData = profileData.data[2];
   for (const element of matchList) {
     var matchDetails;
+    
     if( matchData !== undefined ) {
       let matchFound = matchData.find( innerElement => innerElement.matchID == element);
       if( matchFound !== undefined ) {
@@ -330,7 +331,8 @@ async function fetchMatchData ( region ) {
     }
     //fillMatchData( element );
   }
-  
+
+  localStorage.setItem('accounts', JSON.stringify(storedAccounts));
 
   console.log(storedAccounts);
 }
