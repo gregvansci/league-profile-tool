@@ -465,14 +465,17 @@ nav {
   align-items: center;
   padding-left: 30px;
   padding-right: 30px;
+  cursor: pointer;
 }
 
 .dashboard-main-content-match.win {
-  background-color: hsl(243, 50%, 26%);
+  background: rgb(61,85,112);
+  background: linear-gradient(90deg, hsl(212, 29%, 24%) 0%, hsl(243, 29%, 20%) 100%);
 }
 
 .dashboard-main-content-match.loss {
-  background-color: hsl(356, 50%, 21%);
+  background: rgb(61,85,112);
+  background: linear-gradient(90deg, hsl(313, 31%, 24%) 0%, hsl(243, 29%, 20%) 100%);
 }
 
 .match-tile-info {
@@ -525,20 +528,28 @@ nav {
 }
 
 .match-tile-info-content-1-champ img{
-  border-radius: 50%;
-  height: 54px;
-  width: 54px;
+  border-radius: 9px;
+  height: 60px;
+  width: 60px;
+}
+
+.match-tile-info-content-1-champ.win img{
+  border: solid 2px hsl(180, 69%, 34%);
+}
+
+.match-tile-info-content-1-champ.loss img{
+  border: solid 2px hsl(333, 61%, 64%);
 }
 
 .match-tile-info-content-1-setup {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 2px;
   margin-left: 10px;
 }
 
 .match-tile-info-content-1-setup img {
-  height: 17px;
+  height: 20px;
   border-radius: 3px;
 }
 
@@ -560,26 +571,26 @@ nav {
   margin: 0;
   margin-left: auto;
   margin-right: auto;
-  font-size: .688rem;
+  font-size: .75rem;
   font-weight: 500;
   letter-spacing: 1px;
 }
 
 .match-tile-info-content-2-scoreline h5{
   margin: 0;
-  font-size: .5rem;
+  font-size: .563rem;
   font-weight: 300;
 }
 
 .match-tile-info-content-2-items {
   display: flex;
   flex-direction: row;
-  gap: 1px;
+  gap: 2px;
   padding-top: 2px;
 }
 
 .match-tile-info-content-2-items img {
-  height: 17px;
+  height: 20px;
   border-radius: 3px;
 }
 
@@ -592,6 +603,7 @@ nav {
 
 .match-tile-info-content-3 span{
   color: #CCC;
+  opacity: .75;
 }
 
 .match-tile-comp {
@@ -607,6 +619,7 @@ nav {
   align-items: center;
   gap: 8px;
   color: #CCC;
+  opacity: .75;
   height: 1rem;
 }
 
