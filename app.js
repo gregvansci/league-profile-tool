@@ -294,7 +294,7 @@ async function fetchMatchData ( region ) {
   var apiRegion = getContinent(region);
   var puuid = profileData.data[0].puuid;
   try {
-    let response = await fetch('https://'+apiRegion+'.api.riotgames.com/lol/match/v5/matches/by-puuid/'+puuid+'/ids?start=0&count=4&api_key='+devkey);
+    let response = await fetch('https://'+apiRegion+'.api.riotgames.com/lol/match/v5/matches/by-puuid/'+puuid+'/ids?start=0&count=8&api_key='+devkey);
     if( !response.ok )
       throw new Error("Account match history not found");
     console.log("api call match list");
@@ -372,8 +372,6 @@ function fillMatchData ( matchID ) {
   var parIndex = matchData.matchDetails.metadata.participants.indexOf(profileData.data[0].puuid);
   var outcome = matchData.matchDetails.info.participants[parIndex].win?'win':'loss';
   var profileStats = matchData.matchDetails.info.participants[parIndex];
-  console.log(matchData);
-  console.log(profileStats);
 
   var match = document.createElement("div");
   match.classList.add('dashboard-main-content-match', outcome);
@@ -388,17 +386,18 @@ function fillMatchData ( matchID ) {
   if (queueID == 420) { queueType = "Ranked Solo"; }
   else if (queueID == 440) { queueType = "Ranked Flex"; }
   else if (queueID == 400) { queueType = "Normal"; }
+  else if (queueID == 450) { queueType = "ARAM"; }
+  else if (queueID == 900) { queueType = "Tutorial"; }
   else queueType = "Unhandled";
-  matchInfoHeaderQueue.textContent = queueType + "\t - \t";
+  matchInfoHeaderQueue.textContent = queueType + "  -  ";
   matchInfoHeader.appendChild(matchInfoHeaderQueue);
   var matchInfoHeaderLength = document.createElement("div");
   matchInfoHeaderLength.classList.add('match-tile-info-header-length');
-  matchInfoHeaderLength.textContent = matchData.matchDetails.info.gameDuration + "seconds";
-  console.log(matchInfoHeaderLength.textContent);
+  matchInfoHeaderLength.textContent = convertTime(matchData.matchDetails.info.gameDuration) + "  ";
   matchInfoHeader.appendChild(matchInfoHeaderLength);
   var matchInfoHeaderAge = document.createElement("div");
   matchInfoHeaderAge.classList.add('match-tile-info-header-age');
-  matchInfoHeaderAge.textContent = "5 seconds ago";
+  matchInfoHeaderAge.textContent = timeSince(matchData.matchDetails.info.gameEndTimestamp);
   matchInfoHeader.appendChild(matchInfoHeaderAge);
   matchInfo.appendChild(matchInfoHeader);
   var matchInfoContent = document.createElement("div");
@@ -435,7 +434,7 @@ function fillMatchData ( matchID ) {
   matchInfoContent2Scoreline1.textContent = profileStats.kills + "/" + profileStats.deaths + "/" + profileStats.assists;
   matchInfoContent2Scoreline.appendChild(matchInfoContent2Scoreline1);
   var matchInfoContent2Scoreline2 = document.createElement("h5");
-  matchInfoContent2Scoreline2.textContent = Math.round(profileStats.kills+profileStats.assists/profileStats.deaths * 100)/100 + " KDA";
+  matchInfoContent2Scoreline2.textContent = Math.round((profileStats.kills+profileStats.assists)/profileStats.deaths * 100)/100 + " KDA";
   matchInfoContent2Scoreline.appendChild(matchInfoContent2Scoreline2);
   matchInfoContent2.appendChild(matchInfoContent2Scoreline);
 
@@ -500,24 +499,194 @@ function fillMatchData ( matchID ) {
   matchInfoContent3.appendChild(matchInfoContent3Vision);
 
   matchInfoContent.appendChild(matchInfoContent3);
-
   matchInfo.appendChild(matchInfoContent);
+  match.appendChild(matchInfo);
+
 
   var matchComp = document.createElement("div");
   matchComp.classList.add('match-tile-comp');
   var matchCompTop = document.createElement("div");
   matchCompTop.classList.add('match-tile-comp-role');
   var player0 = document.createElement("a");
-  player0.textContext = matchData.matchDetails.info.participants[0].summonerName;
-  player0.href = ('./summoner/profile.html?region=' + searchRegion + '&name=' + player0.textContext);
-  //player0.style.add("text-align: right");
+  player0.textContent = matchData.matchDetails.info.participants[0].summonerName;
+  player0.setAttribute("href", './profile.html?region=' + getParameter("region") + '&name=' + player0.textContent);
+  parIndex === 0 ? player0.style = "text-align: right; color: #FFF; opacity: 1;" : player0.style = "text-align: right;";
   matchCompTop.appendChild(player0);
-  var matchChampIcon0 = document.createElement("div");
-
-
-
-  match.appendChild(matchInfo);
   
+  var matchChampIcon0 = document.createElement("div");
+  matchChampIcon0.classList.add('match-champ-icon');
+  var matchChampIcon0Img = document.createElement("img");
+  matchChampIcon0Img.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/" + matchData.matchDetails.info.participants[0].championName + ".png";
+  matchChampIcon0.appendChild(matchChampIcon0Img);
+  matchCompTop.appendChild(matchChampIcon0);
+  
+  var matchRoleIcon = document.createElement("div");
+  matchRoleIcon.classList.add('match-role-icon');
+  var matchRoleIconImg = document.createElement("img");
+  matchRoleIconImg.src = "../assets/role-icons/top.svg";
+  matchRoleIcon.appendChild(matchRoleIconImg);
+  matchCompTop.appendChild(matchRoleIcon);
+  
+  var matchChampIcon5 = document.createElement("div");
+  matchChampIcon5.classList.add('match-champ-icon');
+  matchChampIcon5Img = document.createElement("img");
+  matchChampIcon5Img.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/" + matchData.matchDetails.info.participants[5].championName + ".png";
+  matchChampIcon5.appendChild(matchChampIcon5Img);
+  matchCompTop.appendChild(matchChampIcon5);
+  
+  var player5 = document.createElement("a");
+  player5.textContent = matchData.matchDetails.info.participants[5].summonerName; 
+  player5.setAttribute("href", './summoner/profile.html?region=' + getParameter("region") + '&name=' + player5.textContent);
+  parIndex === 5 ? player5.style = "color: #FFF; opacity: 1;" : "";
+  matchCompTop.appendChild(player5);
+  matchComp.appendChild(matchCompTop);
+
+  var matchCompJg = document.createElement("div");
+  matchCompJg.classList.add('match-tile-comp-role');
+  var player1 = document.createElement("a");
+  player1.textContent = matchData.matchDetails.info.participants[1].summonerName;
+  player1.setAttribute("href", './profile.html?region=' + getParameter("region") + '&name=' + player1.textContent);
+  parIndex === 1 ? player1.style = "text-align: right; color: #FFF; opacity: 1;" : player1.style = "text-align: right;";
+  matchCompJg.appendChild(player1);
+
+  var matchChampIcon1 = document.createElement("div");
+  matchChampIcon1.classList.add('match-champ-icon');
+  var matchChampIcon1Img = document.createElement("img");
+  matchChampIcon1Img.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/" + matchData.matchDetails.info.participants[1].championName + ".png";
+  matchChampIcon1.appendChild(matchChampIcon1Img);
+  matchCompJg.appendChild(matchChampIcon1);
+
+  var matchRoleIcon = document.createElement("div");
+  matchRoleIcon.classList.add('match-role-icon');
+  var matchRoleIconImg = document.createElement("img");
+  matchRoleIconImg.src = "../assets/role-icons/jg.svg";
+  matchRoleIcon.appendChild(matchRoleIconImg);
+  matchCompJg.appendChild(matchRoleIcon);
+  
+  var matchChampIcon2 = document.createElement("div");
+  matchChampIcon2.classList.add('match-champ-icon');
+  var matchChampIcon2Img = document.createElement("img");
+  matchChampIcon2Img.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/" + matchData.matchDetails.info.participants[6].championName + ".png";
+  matchChampIcon2.appendChild(matchChampIcon2Img);
+  matchCompJg.appendChild(matchChampIcon2);
+  
+  var player6 = document.createElement("a");
+  player6.textContent = matchData.matchDetails.info.participants[6].summonerName;
+  player6.setAttribute("href", './profile.html?region=' + getParameter("region") + '&name=' + player6.textContent);
+  parIndex === 6 ? player6.style = "color: #FFF; opacity: 1;" : "";
+  matchCompJg.appendChild(player6);
+  matchComp.appendChild(matchCompJg);
+
+  var matchCompMid = document.createElement("div");
+  matchCompMid.classList.add('match-tile-comp-role');
+  var player2 = document.createElement("a");
+  player2.textContent = matchData.matchDetails.info.participants[2].summonerName;
+  player2.setAttribute("href", './profile.html?region=' + getParameter("region") + '&name=' + player2.textContent);
+  parIndex === 2 ? player2.style = "text-align: right; color: #FFF; opacity: 1;" : player2.style = "text-align: right;";
+  matchCompMid.appendChild(player2);
+
+  var matchChampIcon2 = document.createElement("div");
+  matchChampIcon2.classList.add('match-champ-icon');
+  var matchChampIcon2Img = document.createElement("img");
+  matchChampIcon2Img.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/" + matchData.matchDetails.info.participants[2].championName + ".png";
+  matchChampIcon2.appendChild(matchChampIcon2Img);
+  matchCompMid.appendChild(matchChampIcon2);
+
+  var matchRoleIcon = document.createElement("div");
+  matchRoleIcon.classList.add('match-role-icon');
+  var matchRoleIconImg = document.createElement("img");
+  matchRoleIconImg.src = "../assets/role-icons/mid.svg";
+  matchRoleIcon.appendChild(matchRoleIconImg);
+  matchCompMid.appendChild(matchRoleIcon);
+
+  var matchChampIcon3 = document.createElement("div");
+  matchChampIcon3.classList.add('match-champ-icon');
+  var matchChampIcon3Img = document.createElement("img");
+  matchChampIcon3Img.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/" + matchData.matchDetails.info.participants[7].championName + ".png";
+  matchChampIcon3.appendChild(matchChampIcon3Img);
+  matchCompMid.appendChild(matchChampIcon3);
+
+  var player7 = document.createElement("a");
+  player7.textContent = matchData.matchDetails.info.participants[7].summonerName;
+  player7.setAttribute("href", './profile.html?region=' + getParameter("region") + '&name=' + player7.textContent);
+  parIndex === 7 ? player7.style = "color: #FFF; opacity: 1;" : "";
+  matchCompMid.appendChild(player7);
+  matchComp.appendChild(matchCompMid);
+
+  var matchCompBot = document.createElement("div");
+  matchCompBot.classList.add('match-tile-comp-role');
+  var player3 = document.createElement("a");
+  player3.textContent = matchData.matchDetails.info.participants[3].summonerName;
+  player3.setAttribute("href", './profile.html?region=' + getParameter("region") + '&name=' + player3.textContent);
+  parIndex === 3 ? player3.style = "text-align: right; color: #FFF; opacity: 1;" : player3.style = "text-align: right;";
+  matchCompBot.appendChild(player3);
+
+  var matchChampIcon3 = document.createElement("div");
+  matchChampIcon3.classList.add('match-champ-icon');
+  var matchChampIcon3Img = document.createElement("img");
+  matchChampIcon3Img.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/" + matchData.matchDetails.info.participants[3].championName + ".png";
+  matchChampIcon3.appendChild(matchChampIcon3Img);
+  matchCompBot.appendChild(matchChampIcon3);
+
+  var matchRoleIcon = document.createElement("div");
+  matchRoleIcon.classList.add('match-role-icon');
+  var matchRoleIconImg = document.createElement("img");
+  matchRoleIconImg.src = "../assets/role-icons/bot.svg";
+  matchRoleIcon.appendChild(matchRoleIconImg);
+  matchCompBot.appendChild(matchRoleIcon);
+
+  var matchChampIcon4 = document.createElement("div");
+  matchChampIcon4.classList.add('match-champ-icon');
+  var matchChampIcon4Img = document.createElement("img");
+  matchChampIcon4Img.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/" + matchData.matchDetails.info.participants[8].championName + ".png";
+  matchChampIcon4.appendChild(matchChampIcon4Img);
+  matchCompBot.appendChild(matchChampIcon4);
+
+  var player8 = document.createElement("a");
+  player8.textContent = matchData.matchDetails.info.participants[8].summonerName;
+  player8.setAttribute("href", './profile.html?region=' + getParameter("region") + '&name=' + player8.textContent);
+  parIndex === 8 ? player8.style = "color: #FFF; opacity: 1;" : "";
+  matchCompBot.appendChild(player8);
+  matchComp.appendChild(matchCompBot);
+
+  var matchCompSup = document.createElement("div");
+  matchCompSup.classList.add('match-tile-comp-role');
+  var player4 = document.createElement("a");
+  player4.textContent = matchData.matchDetails.info.participants[4].summonerName;
+  player4.setAttribute("href", './profile.html?region=' + getParameter("region") + '&name=' + player4.textContent);
+  parIndex === 4 ? player4.style = "text-align: right; color: #FFF; opacity: 1;" : player4.style = "text-align: right;";
+  matchCompSup.appendChild(player4);
+
+  var matchChampIcon4 = document.createElement("div");
+  matchChampIcon4.classList.add('match-champ-icon');
+  var matchChampIcon4Img = document.createElement("img");
+  matchChampIcon4Img.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/" + matchData.matchDetails.info.participants[4].championName + ".png";
+  matchChampIcon4.appendChild(matchChampIcon4Img);
+  matchCompSup.appendChild(matchChampIcon4);
+
+  var matchRoleIcon = document.createElement("div");
+  matchRoleIcon.classList.add('match-role-icon');
+  var matchRoleIconImg = document.createElement("img");
+  matchRoleIconImg.src = "../assets/role-icons/sup.svg";
+  matchRoleIcon.appendChild(matchRoleIconImg);
+  matchCompSup.appendChild(matchRoleIcon);
+
+  var matchChampIcon5 = document.createElement("div");
+  matchChampIcon5.classList.add('match-champ-icon');
+  var matchChampIcon5Img = document.createElement("img");
+  matchChampIcon5Img.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/" + matchData.matchDetails.info.participants[9].championName + ".png";
+  matchChampIcon5.appendChild(matchChampIcon5Img);
+  matchCompSup.appendChild(matchChampIcon5);
+
+  var player9 = document.createElement("a");
+  player9.textContent = matchData.matchDetails.info.participants[9].summonerName;
+  player9.setAttribute("href", './profile.html?region=' + getParameter("region") + '&name=' + player9.textContent);
+  parIndex === 9 ? player9.style = "color: #FFF; opacity: 1;" : "";
+  matchCompSup.appendChild(player9);
+  matchComp.appendChild(matchCompSup);
+
+  match.appendChild(matchComp);
+    
   document.getElementById("match-list").appendChild(match);
 }
 
@@ -529,18 +698,67 @@ function getSummoner ( id ) {
     return "SummonerFlash";
   }
   else if( id === 6 ) {
-    return "Ghost";
+    return "SummonerGhost";
+  }
+  else if( id === 7 ) {
+    return "SummonerHaste";
   }
   else if( id === 12 ) {
-    return "Teleport";
+    return "SummonerTeleport";
   }
   else if( id === 13 ) {
-    return "Smite";
+    return "SummonerSmite";
   }
   else if( id === 14 ) {
-    return "SummonerExhaust";
+    return "SummonerSnowball";
   }
+  else if( id === 21 ) {
+    return "SummonerBarrier";
+  } 
   
+}
+
+function convertTime ( seconds ) {
+  var minutes = Math.floor(seconds / 60 );
+  var seconds = (seconds % 60);
+  if( seconds < 10) {
+    seconds = "0" + seconds;
+  }
+  return minutes + ":" + seconds;
+}
+
+function timeSince ( unixTimeStamp ) {
+  // calculate time difference between now and passed timestamp
+  var now = new Date().getTime();
+  var timeDifference = Math.floor((now - unixTimeStamp) / 1000);;
+  // if less than a minute
+  if( timeDifference < 60 ) {
+    return "Just now";
+  }
+  // if less than an hour
+  else if( timeDifference < 3600 ) {
+    return Math.floor(timeDifference / 60) + " minutes ago";
+  }
+  // if less than a day
+  else if( timeDifference < 86400 ) {
+    return Math.floor(timeDifference / 3600) + " hours ago";
+  }
+  // if less than a week
+  else if( timeDifference < 604800 ) {
+    return Math.floor(timeDifference / 86400) + " days ago";
+  }
+  // if less than a month
+  else if( timeDifference < 2592000 ) {
+    return Math.floor(timeDifference / 604800) + " weeks ago";
+  }
+  // if less than a year
+  else if( timeDifference < 31536000 ) {
+    return Math.floor(timeDifference / 2592000) + " months ago";
+  }
+  // if more than a year
+  else {
+    return Math.floor(timeDifference / 31536000) + " years ago";
+  }
 }
 
 function getContinent ( region ) {

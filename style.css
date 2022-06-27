@@ -662,7 +662,7 @@ nav {
 }
 
 .match-tile-info-content-2-scoreline h5{
-  margin: 0;
+  margin: auto;
   font-size: .563rem;
   font-weight: 300;
 }
@@ -705,8 +705,6 @@ nav {
   justify-content: center;
   align-items: center;
   gap: 8px;
-  color: #CCC;
-  opacity: .75;
   height: 1rem;
 }
 
@@ -717,7 +715,13 @@ nav {
   white-space: nowrap;
   overflow: hidden !important;
   text-overflow: ellipsis;
+  text-decoration: none;
+  opacity: .8;
+  color: #CCC;
 }
+
+
+
 .match-champ-icon img{
   width: 1rem;
   height: 1rem;
