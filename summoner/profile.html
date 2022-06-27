@@ -16,17 +16,21 @@
         <div class="nav-left-option">
           <h3 onclick="window.location = ('../')">Home</h3>
         </div>
-        <div class="nav-left-option">
+        <div class="nav-left-option" onclick="popupMessage('champions')">
           <h3>Champions</h3>
+          <span class="popuptext" id="champions">Coming Soon!</span>
         </div>
-        <div class="nav-left-option">
+        <div class="nav-left-option" onclick="popupMessage('stats')">
           <h3>Stats</h3>
+          <span class="popuptext" id="stats">Coming Soon!</span>
         </div>
-        <div class="nav-left-option">
+        <div class="nav-left-option" onclick="popupMessage('leaderboard')">
           <h3>Leaderboard</h3>
+          <span class="popuptext" id="leaderboard">Coming Soon!</span>
         </div>
-        <div class="nav-left-option">
+        <div class="nav-left-option" onclick="popupMessage('pros')">
           <h3>Pros</h3>
+          <span class="popuptext" id="pros">Coming Soon!</span>
         </div>
       </div>
       <div class="nav-right">
@@ -100,12 +104,13 @@
           <div class="dashboard-main-nav-current">
             <h3>Matches</p>
           </div>
-
-          <div class="dashboard-main-nav-option">
+          <div class="dashboard-main-nav-option" onclick="popupMessage('profile-champions')">
             <h3>Champions</p>
+            <span class="popuptext" id="profile-champions">Coming Soon!</span>
           </div>
-          <div class="dashboard-main-nav-option">
+          <div class="dashboard-main-nav-option" onclick="popupMessage('challenges')">
             <h3>Challenges</p>
+            <span class="popuptext" id="challenges">Coming Soon!</span>
           </div>
         </div>
         <div class="dashboard-main-content">

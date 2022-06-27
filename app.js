@@ -10,6 +10,7 @@ var searchHistory;
 var profileData;
 var storedAccounts;
 var matchList;
+var pending = false;
 
 function initHome () {
   getDevKey("./dev-key.json");
@@ -29,6 +30,18 @@ function initHome () {
       console.log(this.src);
     }
   })
+}
+
+function popupMessage ( elementID ) {
+  if (pending) return;
+  pending = true;
+  let popup = document.getElementById(elementID);
+  popup.classList.add("show");
+  setTimeout( () => {
+    popup.classList.remove("show");
+    pending = false;
+  }, 1000);
+  
 }
 
 function getDevKey(keyPath) {
