@@ -578,26 +578,21 @@ nav {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 7px;
 }
 
-.match-tile-info-header-queue h4 {
+.match-tile-info-header-queue {
   margin: 0;
   font-weight: 600;
   font-size: .625rem;
 }
 
-.match-tile-info-header span {
-  font-size: .625rem;
-}
-
-.match-tile-info-header-length h5 {
+.match-tile-info-header-length {
   margin: 0;
   font-weight: 400;
   font-size: .563rem;
 }
 
-.match-tile-info-header-age h5 {
+.match-tile-info-header-age {
   margin: 0;
   font-weight: 400;
   font-size: .563rem;
@@ -675,6 +670,8 @@ nav {
 .match-tile-info-content-2-items {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  width: 160px;
   gap: 2px;
   padding-top: 2px;
 }

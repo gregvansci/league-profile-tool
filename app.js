@@ -294,7 +294,7 @@ async function fetchMatchData ( region ) {
   var apiRegion = getContinent(region);
   var puuid = profileData.data[0].puuid;
   try {
-    let response = await fetch('https://'+apiRegion+'.api.riotgames.com/lol/match/v5/matches/by-puuid/'+puuid+'/ids?start=0&count=8&api_key='+devkey);
+    let response = await fetch('https://'+apiRegion+'.api.riotgames.com/lol/match/v5/matches/by-puuid/'+puuid+'/ids?start=0&count=4&api_key='+devkey);
     if( !response.ok )
       throw new Error("Account match history not found");
     console.log("api call match list");
@@ -342,12 +342,12 @@ async function fetchMatchData ( region ) {
 
       
     }
-    //fillMatchData( element );
+    fillMatchData( element );
   }
 
   localStorage.setItem('accounts', JSON.stringify(storedAccounts));
 
-  console.log(storedAccounts);
+  //console.log(storedAccounts);
 }
 
 async function fetchMatchDetails ( apiRegion, matchID ) {
@@ -366,18 +366,180 @@ async function fetchMatchDetails ( apiRegion, matchID ) {
 }
 
 function fillMatchData ( matchID ) {  
-  var matchInfo = profileData.data[2].find(element => element.matchID == matchID);
-  var parIndex = matchInfo.matchDetails.metadata.participants.indexOf(profileData.data[0].puuid);
+  // fill match data into html
 
-  var list = document.getElementById("match-list");
-  var newMatch = document.createElement("div");
-  newMatch.classList.add('dashboard-main-content-match', matchInfo.matchDetails.info.participants[parIndex].win?'win':'loss');
-  newMatch.textContent = matchInfo.matchDetails.info.participants[parIndex].win ? "Victory" : "Defeat"
+  var matchData = profileData.data[2].find(element => element.matchID == matchID);
+  var parIndex = matchData.matchDetails.metadata.participants.indexOf(profileData.data[0].puuid);
+  var outcome = matchData.matchDetails.info.participants[parIndex].win?'win':'loss';
+  var profileStats = matchData.matchDetails.info.participants[parIndex];
+  console.log(matchData);
+  console.log(profileStats);
+
+  var match = document.createElement("div");
+  match.classList.add('dashboard-main-content-match', outcome);
+  var matchInfo = document.createElement("div");
+  matchInfo.classList.add('match-tile-info');
+  var matchInfoHeader = document.createElement("div");
+  matchInfoHeader.classList.add('match-tile-info-header');
+  var matchInfoHeaderQueue = document.createElement("div");
+  matchInfoHeaderQueue.classList.add('match-tile-info-header-queue');
+  var queueID = matchData.matchDetails.info.queueId;
+  var queueType;
+  if (queueID == 420) { queueType = "Ranked Solo"; }
+  else if (queueID == 440) { queueType = "Ranked Flex"; }
+  else if (queueID == 400) { queueType = "Normal"; }
+  else queueType = "Unhandled";
+  matchInfoHeaderQueue.textContent = queueType + "\t - \t";
+  matchInfoHeader.appendChild(matchInfoHeaderQueue);
+  var matchInfoHeaderLength = document.createElement("div");
+  matchInfoHeaderLength.classList.add('match-tile-info-header-length');
+  matchInfoHeaderLength.textContent = matchData.matchDetails.info.gameDuration + "seconds";
+  console.log(matchInfoHeaderLength.textContent);
+  matchInfoHeader.appendChild(matchInfoHeaderLength);
+  var matchInfoHeaderAge = document.createElement("div");
+  matchInfoHeaderAge.classList.add('match-tile-info-header-age');
+  matchInfoHeaderAge.textContent = "5 seconds ago";
+  matchInfoHeader.appendChild(matchInfoHeaderAge);
+  matchInfo.appendChild(matchInfoHeader);
+  var matchInfoContent = document.createElement("div");
+  matchInfoContent.classList.add('match-tile-info-content');
   
+  var matchInfoContent1 = document.createElement("div");
+  matchInfoContent1.classList.add('match-tile-info-content-1');
+  var matchInfoContent1Champ = document.createElement("div");
+  matchInfoContent1Champ.classList.add('match-tile-info-content-1-champ', outcome);
+  var matchInfoContent1ChampImg = document.createElement("img");
+  matchInfoContent1ChampImg.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/" + profileStats.championName + ".png";
+  matchInfoContent1Champ.appendChild(matchInfoContent1ChampImg);
+  matchInfoContent1.appendChild(matchInfoContent1Champ);
 
+  var matchInfoContent1Setup = document.createElement("div");
+  matchInfoContent1Setup.classList.add('match-tile-info-content-1-setup');
+  var matchInfoContent1Setup1 = document.createElement("img");
+  matchInfoContent1Setup1.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/spell/" + getSummoner(profileStats.summoner1Id) + ".png";
+  matchInfoContent1Setup.appendChild(matchInfoContent1Setup1);
+  var matchInfoContent1Setup2 = document.createElement("img");
+  matchInfoContent1Setup2.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/spell/" + getSummoner(profileStats.summoner2Id) + ".png";
+  matchInfoContent1Setup.appendChild(matchInfoContent1Setup2);
+  var matchInfoContent1Setup3 = document.createElement("img");
+  matchInfoContent1Setup3.src = "https://cdn.mobalytics.gg/assets/lol/images/perks/"+profileStats.perks.styles[0].selections[0].perk+".png";
+  matchInfoContent1Setup.appendChild(matchInfoContent1Setup3);
+  matchInfoContent1.appendChild(matchInfoContent1Setup);
+  matchInfoContent.appendChild(matchInfoContent1);
   
-  list.appendChild(newMatch);
+  var matchInfoContent2 = document.createElement("div");
+  matchInfoContent2.classList.add('match-tile-info-content-2');
+  var matchInfoContent2Scoreline = document.createElement("div");
+  matchInfoContent2Scoreline.classList.add('match-tile-info-content-2-scoreline');
+  var matchInfoContent2Scoreline1 = document.createElement("h3");
+  matchInfoContent2Scoreline1.textContent = profileStats.kills + "/" + profileStats.deaths + "/" + profileStats.assists;
+  matchInfoContent2Scoreline.appendChild(matchInfoContent2Scoreline1);
+  var matchInfoContent2Scoreline2 = document.createElement("h5");
+  matchInfoContent2Scoreline2.textContent = Math.round(profileStats.kills+profileStats.assists/profileStats.deaths * 100)/100 + " KDA";
+  matchInfoContent2Scoreline.appendChild(matchInfoContent2Scoreline2);
+  matchInfoContent2.appendChild(matchInfoContent2Scoreline);
 
+  var matchInfoContent2Items = document.createElement("div");
+  matchInfoContent2Items.classList.add('match-tile-info-content-2-items');
+  var matchInfoContent2Items0 = document.createElement("img");
+  matchInfoContent2Items0.src = profileStats.item0 ? "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/item/" + profileStats.item0 + ".png" : "";
+  matchInfoContent2Items.appendChild(matchInfoContent2Items0);
+  var matchInfoContent2Items1 = document.createElement("img");
+  matchInfoContent2Items1.src = profileStats.item1 ? "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/item/" + profileStats.item1 + ".png" : "";
+  matchInfoContent2Items.appendChild(matchInfoContent2Items1);
+  var matchInfoContent2Items2 = document.createElement("img");
+  matchInfoContent2Items2.src = profileStats.item2 ? "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/item/" + profileStats.item2 + ".png" : "";
+  matchInfoContent2Items.appendChild(matchInfoContent2Items2);
+  var matchInfoContent2Items3 = document.createElement("img");
+  matchInfoContent2Items3.src = profileStats.item3 ? "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/item/" + profileStats.item3 + ".png" : "";
+  matchInfoContent2Items.appendChild(matchInfoContent2Items3);
+  var matchInfoContent2Items4 = document.createElement("img");
+  matchInfoContent2Items4.src = profileStats.item4 ? "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/item/" + profileStats.item4 + ".png" : "";
+  matchInfoContent2Items.appendChild(matchInfoContent2Items4);
+  var matchInfoContent2Items5 = document.createElement("img");
+  matchInfoContent2Items5.src = profileStats.item5 ? "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/item/" + profileStats.item5 + ".png" : "";
+  matchInfoContent2Items.appendChild(matchInfoContent2Items5);
+  var matchInfoContent2Items6 = document.createElement("img");
+  matchInfoContent2Items6.src = profileStats.item6 ? "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/item/" + profileStats.item6 + ".png" : "";
+  matchInfoContent2Items.appendChild(matchInfoContent2Items6);
+  matchInfoContent2.appendChild(matchInfoContent2Items);
+  matchInfoContent.appendChild(matchInfoContent2);
+
+  var matchInfoContent3 = document.createElement("div");
+  matchInfoContent3.classList.add('match-tile-info-content-3');
+  var matchInfoContent3CS = document.createElement("div");
+  matchInfoContent3CS.classList.add('match-tile-info-content-3-cs');
+  matchInfoContent3CS.textContent = profileStats.totalMinionsKilled + " (" + Math.round(profileStats.totalMinionsKilled*60/profileStats.timePlayed*10) / 10 + ") ";
+  var matchInfoContent3CSSpan = document.createElement("span");
+  matchInfoContent3CSSpan.textContent = "CS";
+  matchInfoContent3CS.appendChild(matchInfoContent3CSSpan);
+  matchInfoContent3.appendChild(matchInfoContent3CS);
+  
+  var matchInfoContent3KP = document.createElement("div");
+  matchInfoContent3KP.classList.add('match-tile-info-content-3-kp');
+  matchInfoContent3KP.textContent = Math.round(((profileStats.kills + profileStats.assists) / (parIndex <= 4 ? matchData.matchDetails.info.teams[0].objectives.champion.kills : matchData.matchDetails.info.teams[1].objectives.champion.kills)) * 1000) / 10 + "% ";
+  var matchInfoContent3KPSpan = document.createElement("span");
+  matchInfoContent3KPSpan.textContent = "KP";
+  matchInfoContent3KP.appendChild(matchInfoContent3KPSpan);
+  matchInfoContent3.appendChild(matchInfoContent3KP);
+
+  var matchInfoContent3Wards = document.createElement("div");
+  matchInfoContent3Wards.classList.add('match-tile-info-content-3-wards');
+  matchInfoContent3Wards.textContent = profileStats.wardsPlaced + " (" + profileStats.wardsKilled + ") / " + profileStats.detectorWardsPlaced + " ";
+  var matchInfoContent3WardsSpan = document.createElement("span");
+  matchInfoContent3WardsSpan.textContent = "Wards";
+  matchInfoContent3Wards.appendChild(matchInfoContent3WardsSpan);
+  matchInfoContent3.appendChild(matchInfoContent3Wards);
+
+  var matchInfoContent3Vision = document.createElement("div");
+  matchInfoContent3Vision.classList.add('match-tile-info-content-3-vision');
+  matchInfoContent3Vision.textContent = profileStats.visionScore + " ";
+  var matchInfoContent3VisionSpan = document.createElement("span");
+  matchInfoContent3VisionSpan.textContent = "Vision";
+  matchInfoContent3Vision.appendChild(matchInfoContent3VisionSpan);
+  matchInfoContent3.appendChild(matchInfoContent3Vision);
+
+  matchInfoContent.appendChild(matchInfoContent3);
+
+  matchInfo.appendChild(matchInfoContent);
+
+  var matchComp = document.createElement("div");
+  matchComp.classList.add('match-tile-comp');
+  var matchCompTop = document.createElement("div");
+  matchCompTop.classList.add('match-tile-comp-role');
+  var player0 = document.createElement("a");
+  player0.textContext = matchData.matchDetails.info.participants[0].summonerName;
+  player0.href = ('./summoner/profile.html?region=' + searchRegion + '&name=' + player0.textContext);
+  //player0.style.add("text-align: right");
+  matchCompTop.appendChild(player0);
+  var matchChampIcon0 = document.createElement("div");
+
+
+
+  match.appendChild(matchInfo);
+  
+  document.getElementById("match-list").appendChild(match);
+}
+
+function getSummoner ( id ) {
+  if( id === 3 ) {
+    return "SummonerExhaust";
+  }
+  else if( id === 4 ) {
+    return "SummonerFlash";
+  }
+  else if( id === 6 ) {
+    return "Ghost";
+  }
+  else if( id === 12 ) {
+    return "Teleport";
+  }
+  else if( id === 13 ) {
+    return "Smite";
+  }
+  else if( id === 14 ) {
+    return "SummonerExhaust";
+  }
   
 }
 
