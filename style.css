@@ -143,6 +143,17 @@ nav {
   cursor: pointer;
 }
 
+.nav-right-search {
+  padding-left: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.nav-right-search-name {
+  padding: 5px;
+  height: 15px;
+}
+
 .home-section {
   margin: auto;
   font-family: 'Inter', sans-serif;
@@ -548,7 +559,7 @@ nav {
   border-radius: 12px;
   padding: 5px;
   margin: 0;
-  height: 100px;
+  height: 120px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -571,6 +582,7 @@ nav {
 .match-tile-info {
   display: flex;
   flex-direction: column;
+  gap: 10px;
 }
 
 .match-tile-info-header {
@@ -583,19 +595,19 @@ nav {
 .match-tile-info-header-queue {
   margin: 0;
   font-weight: 600;
-  font-size: .625rem;
+  font-size: .688rem;
 }
 
 .match-tile-info-header-length {
   margin: 0;
   font-weight: 400;
-  font-size: .563rem;
+  font-size: .625rem;
 }
 
 .match-tile-info-header-age {
   margin: 0;
   font-weight: 400;
-  font-size: .563rem;
+  font-size: .625rem;
 }
 
 .match-tile-info-content {
@@ -684,6 +696,7 @@ nav {
 .match-tile-info-content-3 {
   display: flex;
   flex-direction: column;
+  gap: 3px;
   min-width: 120px;
   font-size: .688rem;
 }
@@ -708,7 +721,7 @@ nav {
   height: 1rem;
 }
 
-.match-tile-comp-role a {
+.match-tile-comp-role-player {
   font-size: .563rem;
   display: inline-block;
   width: 75px;
