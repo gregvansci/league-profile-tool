@@ -24,22 +24,20 @@
           <h3>Stats</h3>
           <span class="popuptext" id="stats">Coming Soon!</span>
         </div>
-        <div class="nav-left-option" onclick="popupMessage('leaderboard')">
-          <h3>Leaderboard</h3>
-          <span class="popuptext" id="leaderboard">Coming Soon!</span>
-        </div>
-        <div class="nav-left-option" onclick="popupMessage('pros')">
-          <h3>Pros</h3>
-          <span class="popuptext" id="pros">Coming Soon!</span>
-        </div>
       </div>
       <div class="nav-right">
-        <img id="themeSelect" src="./assets/dark-theme-icon.svg"/>
-        <img id="infoPage" src="./assets/info-icon.svg"/>
+        <div class="nav-right-option" onclick="popupAbout()">
+          <img id="infoPage" src="./assets/info-icon.svg"/>
+          <span class="popupabout" id="about">
+            <h3>About</h3>
+            <p>Profile explorer for League of Legends. Select a region and search an account name. On the profile page you will see a dashboard showing rank on the left and match history on the right.</p>
+            <a href="https://github.com/gregvansci/league-profile-tool">GitHub Repo</a>
+          </span>
+        </div>
       </div>
     </nav>
   
-    <section aria-labelledby="home-greeting" class="home-section">
+    <section aria-labelledby="home-greeting" class="home-section" onclick="removeAbout()">
       <div class="home-content">
         <div class="home-greeting">
           <img src="./assets/logo-image.png">

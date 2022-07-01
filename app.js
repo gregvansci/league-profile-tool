@@ -11,6 +11,7 @@ var profileData;
 var storedAccounts;
 var matchList;
 var pending = false;
+var aboutInfo = false;
 
 function initHome () {
   getDevKey("./dev-key.json");
@@ -25,25 +26,12 @@ function initHome () {
     }
   });
 
-
   var input = document.getElementById("searchbutton");
   input.addEventListener("click", function(e) {
     searchAccount( queryName.value );
+    
   });
 
-  const toggle = document.getElementById('themeSelect');
-  toggle.addEventListener('click', () => {
-    if ( this.src == "./assets/dark-theme-icon.svg") {
-      console.log('if');
-      this.src = "./assets/light-theme-icon.svg";
-      console.log(this.src);
-    }
-    else {
-      console.log('else');
-      this.src = "./assets/dark-theme-icon.svg";
-      console.log(this.src);
-    }
-  })
 }
 
 function popupMessage ( elementID ) {
@@ -56,6 +44,26 @@ function popupMessage ( elementID ) {
     pending = false;
   }, 1000);
   
+}
+
+function popupAbout () {
+  let popup = document.getElementById('about');
+  if( !aboutInfo ) {
+    popup.classList.add("show");
+    aboutInfo = true;
+  }
+  else {
+    popup.classList.remove("show");
+    aboutInfo = false;
+  }
+}
+
+function removeAbout() {
+  if(aboutInfo) {
+    let popup = document.getElementById('about');
+    popup.classList.remove("show");
+    aboutInfo = false;
+  } 
 }
 
 function getDevKey(keyPath) {
@@ -107,10 +115,9 @@ async function addToHistory ( queryRegion, name, accountBasics ) {
   }
 
   let match = false;
-  if ( searchHistory === null ) {
+  if ( searchHistory === undefined ) {
     searchHistory = JSON.parse(localStorage.getItem('searchHistory')); 
   }
-  console.log(searchHistory);
   searchHistory.forEach( (element, index, arr) => {
     if ( element.name === name && element.region == queryRegion ) {
       arr.splice(index, 1);
@@ -299,7 +306,7 @@ function fillProfileData ( region, name ) {
       else { rankTier = rankTier+" "+element.rank; }
       document.getElementById("ranked-solo").innerHTML = rankTier; 
       document.getElementById("ranked-solo-lp").innerHTML = element.leaguePoints+" LP";
-      document.getElementById("ranked-solo-winloss").innerHTML = Math.round(element.wins * 100 / (element.wins + element.losses)) + "% - "+element.wins+"W "+element.losses+"L";
+      document.getElementById("ranked-solo-winloss").innerHTML = Math.round(element.wins * 100 / (element.wins + element.losses)) + "% "+element.wins+"W "+element.losses+"L";
     }
     else if (element.queueType === "RANKED_FLEX_SR") {
       flex = true;
@@ -314,7 +321,7 @@ function fillProfileData ( region, name ) {
       else { rankTier = rankTier+" "+element.rank; }
       document.getElementById("ranked-flex").innerHTML = rankTier; 
       document.getElementById("ranked-flex-lp").innerHTML = element.leaguePoints+" LP";
-      document.getElementById("ranked-flex-winloss").innerHTML = Math.round(element.wins * 100 / (element.wins + element.losses)) + "% - "+element.wins+"W "+element.losses+"L";
+      document.getElementById("ranked-flex-winloss").innerHTML = Math.round(element.wins * 100 / (element.wins + element.losses)) + "% "+element.wins+"W "+element.losses+"L";
     }
   })
   if(!solo) { document.getElementById("rank-solo-check").style.display = "none"; }
@@ -406,6 +413,8 @@ function fillMatchData ( matchID ) {
   var outcome = matchData.matchDetails.info.participants[parIndex].win?'win':'loss';
   var profileStats = matchData.matchDetails.info.participants[parIndex];
 
+  console.log(matchData);
+
   var match = document.createElement("div");
   match.classList.add('dashboard-main-content-match', outcome);
   var matchInfo = document.createElement("div");
@@ -419,7 +428,9 @@ function fillMatchData ( matchID ) {
   if (queueID == 420) { queueType = "Ranked Solo"; }
   else if (queueID == 440) { queueType = "Ranked Flex"; }
   else if (queueID == 400) { queueType = "Normal"; }
+  else if (queueID == 430) { queueType = "Normal"; }
   else if (queueID == 450) { queueType = "ARAM"; }
+  else if (queueID == 700) { queueType = "Clash"; }
   else if (queueID == 900) { queueType = "Tutorial"; }
   else queueType = "Unhandled";
   matchInfoHeaderQueue.textContent = queueType + "  -  ";
@@ -800,6 +811,9 @@ function getSummoner ( id ) {
   else if( id === 21 ) {
     return "SummonerBarrier";
   }
+  else if( id === 32 ) {
+    return "SummonerSnowball";
+  } 
   else return "unhandled"; 
   
 }
