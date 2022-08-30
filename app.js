@@ -284,7 +284,7 @@ function getParameter ( parameterName ) {
 }
 
 function fillProfileData ( region, name ) {
-  document.getElementById("profile-icon").src = 'http://ddragon.leagueoflegends.com/cdn/12.11.1/img/profileicon/'+profileData.data[0].profileIconId+'.png';  
+  document.getElementById("profile-icon").src = 'http://ddragon.leagueoflegends.com/cdn/12.16.1/img/profileicon/'+profileData.data[0].profileIconId+'.png';  
   document.getElementById("summoner-level").innerHTML = profileData.data[0].summonerLevel;
   document.getElementById("profile-name").innerHTML = profileData.data[0].name;
   document.title = profileData.data[0].name+" - Profile";
@@ -452,17 +452,17 @@ function fillMatchData ( matchID ) {
   var matchInfoContent1Champ = document.createElement("div");
   matchInfoContent1Champ.classList.add('match-tile-info-content-1-champ', outcome);
   var matchInfoContent1ChampImg = document.createElement("img");
-  matchInfoContent1ChampImg.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/" + sanitizeChampionName(profileStats.championName) + ".png";
+  matchInfoContent1ChampImg.src = "https://ddragon.leagueoflegends.com/cdn/12.16.1/img/champion/" + sanitizeChampionName(profileStats.championName) + ".png";
   matchInfoContent1Champ.appendChild(matchInfoContent1ChampImg);
   matchInfoContent1.appendChild(matchInfoContent1Champ);
 
   var matchInfoContent1Setup = document.createElement("div");
   matchInfoContent1Setup.classList.add('match-tile-info-content-1-setup');
   var matchInfoContent1Setup1 = document.createElement("img");
-  matchInfoContent1Setup1.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/spell/" + getSummoner(profileStats.summoner1Id) + ".png";
+  matchInfoContent1Setup1.src = "https://ddragon.leagueoflegends.com/cdn/12.16.1/img/spell/" + getSummoner(profileStats.summoner1Id) + ".png";
   matchInfoContent1Setup.appendChild(matchInfoContent1Setup1);
   var matchInfoContent1Setup2 = document.createElement("img");
-  matchInfoContent1Setup2.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/spell/" + getSummoner(profileStats.summoner2Id) + ".png";
+  matchInfoContent1Setup2.src = "https://ddragon.leagueoflegends.com/cdn/12.16.1/img/spell/" + getSummoner(profileStats.summoner2Id) + ".png";
   matchInfoContent1Setup.appendChild(matchInfoContent1Setup2);
   var matchInfoContent1Setup3 = document.createElement("img");
   matchInfoContent1Setup3.src = "https://cdn.mobalytics.gg/assets/lol/images/perks/"+profileStats.perks.styles[0].selections[0].perk+".png";
@@ -485,25 +485,25 @@ function fillMatchData ( matchID ) {
   var matchInfoContent2Items = document.createElement("div");
   matchInfoContent2Items.classList.add('match-tile-info-content-2-items');
   var matchInfoContent2Items0 = document.createElement("img");
-  matchInfoContent2Items0.src = profileStats.item0 ? "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/item/" + profileStats.item0 + ".png" : "";
+  matchInfoContent2Items0.src = profileStats.item0 ? "https://ddragon.leagueoflegends.com/cdn/12.16.1/img/item/" + profileStats.item0 + ".png" : "";
   matchInfoContent2Items.appendChild(matchInfoContent2Items0);
   var matchInfoContent2Items1 = document.createElement("img");
-  matchInfoContent2Items1.src = profileStats.item1 ? "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/item/" + profileStats.item1 + ".png" : "";
+  matchInfoContent2Items1.src = profileStats.item1 ? "https://ddragon.leagueoflegends.com/cdn/12.16.1/img/item/" + profileStats.item1 + ".png" : "";
   matchInfoContent2Items.appendChild(matchInfoContent2Items1);
   var matchInfoContent2Items2 = document.createElement("img");
-  matchInfoContent2Items2.src = profileStats.item2 ? "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/item/" + profileStats.item2 + ".png" : "";
+  matchInfoContent2Items2.src = profileStats.item2 ? "https://ddragon.leagueoflegends.com/cdn/12.16.1/img/item/" + profileStats.item2 + ".png" : "";
   matchInfoContent2Items.appendChild(matchInfoContent2Items2);
   var matchInfoContent2Items3 = document.createElement("img");
-  matchInfoContent2Items3.src = profileStats.item3 ? "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/item/" + profileStats.item3 + ".png" : "";
+  matchInfoContent2Items3.src = profileStats.item3 ? "https://ddragon.leagueoflegends.com/cdn/12.16.1/img/item/" + profileStats.item3 + ".png" : "";
   matchInfoContent2Items.appendChild(matchInfoContent2Items3);
   var matchInfoContent2Items4 = document.createElement("img");
-  matchInfoContent2Items4.src = profileStats.item4 ? "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/item/" + profileStats.item4 + ".png" : "";
+  matchInfoContent2Items4.src = profileStats.item4 ? "https://ddragon.leagueoflegends.com/cdn/12.16.1/img/item/" + profileStats.item4 + ".png" : "";
   matchInfoContent2Items.appendChild(matchInfoContent2Items4);
   var matchInfoContent2Items5 = document.createElement("img");
-  matchInfoContent2Items5.src = profileStats.item5 ? "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/item/" + profileStats.item5 + ".png" : "";
+  matchInfoContent2Items5.src = profileStats.item5 ? "https://ddragon.leagueoflegends.com/cdn/12.16.1/img/item/" + profileStats.item5 + ".png" : "";
   matchInfoContent2Items.appendChild(matchInfoContent2Items5);
   var matchInfoContent2Items6 = document.createElement("img");
-  matchInfoContent2Items6.src = profileStats.item6 ? "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/item/" + profileStats.item6 + ".png" : "";
+  matchInfoContent2Items6.src = profileStats.item6 ? "https://ddragon.leagueoflegends.com/cdn/12.16.1/img/item/" + profileStats.item6 + ".png" : "";
   matchInfoContent2Items.appendChild(matchInfoContent2Items6);
   matchInfoContent2.appendChild(matchInfoContent2Items);
   matchInfoContent.appendChild(matchInfoContent2);
@@ -565,7 +565,7 @@ function fillMatchData ( matchID ) {
   var matchChampIcon0 = document.createElement("div");
   matchChampIcon0.classList.add('match-champ-icon');
   var matchChampIcon0Img = document.createElement("img");
-  matchChampIcon0Img.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/" + sanitizeChampionName(matchData.matchDetails.info.participants[0].championName) + ".png";
+  matchChampIcon0Img.src = "https://ddragon.leagueoflegends.com/cdn/12.16.1/img/champion/" + sanitizeChampionName(matchData.matchDetails.info.participants[0].championName) + ".png";
   matchChampIcon0.appendChild(matchChampIcon0Img);
   matchCompTop.appendChild(matchChampIcon0);
   
@@ -579,7 +579,7 @@ function fillMatchData ( matchID ) {
   var matchChampIcon5 = document.createElement("div");
   matchChampIcon5.classList.add('match-champ-icon');
   matchChampIcon5Img = document.createElement("img");
-  matchChampIcon5Img.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/" + sanitizeChampionName(matchData.matchDetails.info.participants[5].championName) + ".png";
+  matchChampIcon5Img.src = "https://ddragon.leagueoflegends.com/cdn/12.16.1/img/champion/" + sanitizeChampionName(matchData.matchDetails.info.participants[5].championName) + ".png";
   matchChampIcon5.appendChild(matchChampIcon5Img);
   matchCompTop.appendChild(matchChampIcon5);
   
@@ -609,7 +609,7 @@ function fillMatchData ( matchID ) {
   var matchChampIcon1 = document.createElement("div");
   matchChampIcon1.classList.add('match-champ-icon');
   var matchChampIcon1Img = document.createElement("img");
-  matchChampIcon1Img.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/" + sanitizeChampionName(matchData.matchDetails.info.participants[1].championName) + ".png";
+  matchChampIcon1Img.src = "https://ddragon.leagueoflegends.com/cdn/12.16.1/img/champion/" + sanitizeChampionName(matchData.matchDetails.info.participants[1].championName) + ".png";
   matchChampIcon1.appendChild(matchChampIcon1Img);
   matchCompJg.appendChild(matchChampIcon1);
 
@@ -623,7 +623,7 @@ function fillMatchData ( matchID ) {
   var matchChampIcon2 = document.createElement("div");
   matchChampIcon2.classList.add('match-champ-icon');
   var matchChampIcon2Img = document.createElement("img");
-  matchChampIcon2Img.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/" + sanitizeChampionName(matchData.matchDetails.info.participants[6].championName) + ".png";
+  matchChampIcon2Img.src = "https://ddragon.leagueoflegends.com/cdn/12.16.1/img/champion/" + sanitizeChampionName(matchData.matchDetails.info.participants[6].championName) + ".png";
   matchChampIcon2.appendChild(matchChampIcon2Img);
   matchCompJg.appendChild(matchChampIcon2);
   
@@ -653,7 +653,7 @@ function fillMatchData ( matchID ) {
   var matchChampIcon2 = document.createElement("div");
   matchChampIcon2.classList.add('match-champ-icon');
   var matchChampIcon2Img = document.createElement("img");
-  matchChampIcon2Img.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/" + sanitizeChampionName(matchData.matchDetails.info.participants[2].championName) + ".png";
+  matchChampIcon2Img.src = "https://ddragon.leagueoflegends.com/cdn/12.16.1/img/champion/" + sanitizeChampionName(matchData.matchDetails.info.participants[2].championName) + ".png";
   matchChampIcon2.appendChild(matchChampIcon2Img);
   matchCompMid.appendChild(matchChampIcon2);
 
@@ -667,7 +667,7 @@ function fillMatchData ( matchID ) {
   var matchChampIcon3 = document.createElement("div");
   matchChampIcon3.classList.add('match-champ-icon');
   var matchChampIcon3Img = document.createElement("img");
-  matchChampIcon3Img.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/" + sanitizeChampionName(matchData.matchDetails.info.participants[7].championName) + ".png";
+  matchChampIcon3Img.src = "https://ddragon.leagueoflegends.com/cdn/12.16.1/img/champion/" + sanitizeChampionName(matchData.matchDetails.info.participants[7].championName) + ".png";
   matchChampIcon3.appendChild(matchChampIcon3Img);
   matchCompMid.appendChild(matchChampIcon3);
 
@@ -697,7 +697,7 @@ function fillMatchData ( matchID ) {
   var matchChampIcon3 = document.createElement("div");
   matchChampIcon3.classList.add('match-champ-icon');
   var matchChampIcon3Img = document.createElement("img");
-  matchChampIcon3Img.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/" + sanitizeChampionName(matchData.matchDetails.info.participants[3].championName) + ".png";
+  matchChampIcon3Img.src = "https://ddragon.leagueoflegends.com/cdn/12.16.1/img/champion/" + sanitizeChampionName(matchData.matchDetails.info.participants[3].championName) + ".png";
   matchChampIcon3.appendChild(matchChampIcon3Img);
   matchCompBot.appendChild(matchChampIcon3);
 
@@ -711,7 +711,7 @@ function fillMatchData ( matchID ) {
   var matchChampIcon4 = document.createElement("div");
   matchChampIcon4.classList.add('match-champ-icon');
   var matchChampIcon4Img = document.createElement("img");
-  matchChampIcon4Img.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/" + sanitizeChampionName(matchData.matchDetails.info.participants[8].championName) + ".png";
+  matchChampIcon4Img.src = "https://ddragon.leagueoflegends.com/cdn/12.16.1/img/champion/" + sanitizeChampionName(matchData.matchDetails.info.participants[8].championName) + ".png";
   matchChampIcon4.appendChild(matchChampIcon4Img);
   matchCompBot.appendChild(matchChampIcon4);
 
@@ -741,7 +741,7 @@ function fillMatchData ( matchID ) {
   var matchChampIcon4 = document.createElement("div");
   matchChampIcon4.classList.add('match-champ-icon');
   var matchChampIcon4Img = document.createElement("img");
-  matchChampIcon4Img.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/" + sanitizeChampionName(matchData.matchDetails.info.participants[4].championName) + ".png";
+  matchChampIcon4Img.src = "https://ddragon.leagueoflegends.com/cdn/12.16.1/img/champion/" + sanitizeChampionName(matchData.matchDetails.info.participants[4].championName) + ".png";
   matchChampIcon4.appendChild(matchChampIcon4Img);
   matchCompSup.appendChild(matchChampIcon4);
 
@@ -755,7 +755,7 @@ function fillMatchData ( matchID ) {
   var matchChampIcon5 = document.createElement("div");
   matchChampIcon5.classList.add('match-champ-icon');
   var matchChampIcon5Img = document.createElement("img");
-  matchChampIcon5Img.src = "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/" + sanitizeChampionName(matchData.matchDetails.info.participants[9].championName) + ".png";
+  matchChampIcon5Img.src = "https://ddragon.leagueoflegends.com/cdn/12.16.1/img/champion/" + sanitizeChampionName(matchData.matchDetails.info.participants[9].championName) + ".png";
   matchChampIcon5.appendChild(matchChampIcon5Img);
   matchCompSup.appendChild(matchChampIcon5);
 
